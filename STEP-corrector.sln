@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.35431.46
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STEP-corrector", "STEP-corrector.csproj", "{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Релиз|Any CPU = Релиз|Any CPU
+		Релиз|x64 = Релиз|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Debug|x64.ActiveCfg = Debug|x64
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Debug|x64.Build.0 = Debug|x64
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Release|x64.ActiveCfg = Release|x64
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Release|x64.Build.0 = Release|x64
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Релиз|Any CPU.ActiveCfg = Релиз|Any CPU
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Релиз|Any CPU.Build.0 = Релиз|Any CPU
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Релиз|x64.ActiveCfg = Релиз|x64
+		{ED704E57-5ABB-4D42-8CB9-58FCE218F3DC}.Релиз|x64.Build.0 = Релиз|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3073C94B-4D65-4121-8169-A39075BF0517}
+	EndGlobalSection
+EndGlobal

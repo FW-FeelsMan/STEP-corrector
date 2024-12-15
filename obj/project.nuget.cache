@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "edEWkPM2c8TNFH2KwZGEKc2OvSJMsGLOn6x+GRVyMajEX553H3YuNBexIEScSRexmOIfdbmPJj3+OGFbCcFb/Q==",
+  "success": true,
+  "projectFilePath": "D:\\Unity\\STEP-corrector(.net 4)\\STEP-corrector\\STEP-corrector.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net40\\1.0.3\\microsoft.netframework.referenceassemblies.net40.1.0.3.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\wpfanimatedgif\\2.0.2\\wpfanimatedgif.2.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,64 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Unity\\STEP-corrector(.net 4)\\STEP-corrector\\STEP-corrector.csproj": {}
+  },
+  "projects": {
+    "D:\\Unity\\STEP-corrector(.net 4)\\STEP-corrector\\STEP-corrector.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Unity\\STEP-corrector(.net 4)\\STEP-corrector\\STEP-corrector.csproj",
+        "projectName": "STEP-corrector",
+        "projectPath": "D:\\Unity\\STEP-corrector(.net 4)\\STEP-corrector\\STEP-corrector.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "D:\\Unity\\STEP-corrector(.net 4)\\STEP-corrector\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net40"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net40": {
+            "targetAlias": "net40",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net40": {
+          "targetAlias": "net40",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies.net40": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )"
+            },
+            "WpfAnimatedGif": {
+              "target": "Package",
+              "version": "[2.0.2, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win7-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
