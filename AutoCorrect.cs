@@ -11,10 +11,6 @@ namespace STEP_corrector
     {
         private readonly Dictionary<string, string> _replacements = new Dictionary<string, string>();
 
-        /// <summary>
-        /// Загрузка файла автозамены.
-        /// </summary>
-        /// <param name="filePath">Путь к файлу автозамены</param>
         public void LoadAutoCorrectFile(string filePath)
         {
             try
@@ -51,7 +47,6 @@ namespace STEP_corrector
             {
                 if (string.IsNullOrEmpty(replacement.Value))
                 {
-                    // Удаляем значение
                     line = line.Replace(replacement.Key, string.Empty);
                 }
                 else

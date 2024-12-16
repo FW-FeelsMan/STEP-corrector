@@ -490,8 +490,6 @@
       "net40": {
         "dependencies": {
           "Microsoft.NETFramework.ReferenceAssemblies.net40": {
-            "include": "Runtime, Build, Native, ContentFiles, Analyzers",
-            "suppressParent": "All",
             "target": "Package",
             "version": "[1.0.3, )"
           },

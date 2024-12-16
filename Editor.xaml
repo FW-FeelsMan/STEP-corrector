@@ -10,7 +10,7 @@
         <!-- Фон окна -->
         <Grid Margin="0,25,0,0">
             <Grid.Background>
-                <ImageBrush ImageSource="/background.png" />
+                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/background.png"/>
             </Grid.Background>
 
             <!-- Прогресс-бар -->

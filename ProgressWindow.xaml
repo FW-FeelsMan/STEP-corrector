@@ -9,7 +9,7 @@
 
         <Grid Margin="0,25,0,0">
             <Grid.Background>
-                <ImageBrush ImageSource="/background.png"/>
+                <ImageBrush ImageSource="img/background.png"/>
             </Grid.Background>
             <ProgressBar Width="300" Height="20" 
                          Value="{Binding ProgressValue}" 

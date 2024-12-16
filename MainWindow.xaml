@@ -5,75 +5,138 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        
-        Title="STEP-corrector" Height="450" Width="800" AllowsTransparency="True"  Icon="/faviconV2.png" 
-        ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
 
+        Title="STEP-corrector" Height="450" Width="800" AllowsTransparency="True"  Icon="pack://siteoforigin:,,,/img/faviconV2.png"
+        ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="/background.png"/>
+        <ImageBrush ImageSource="pack://siteoforigin:,,,/img/background.png"/>
     </Window.Background>
 
     <Grid x:Name="MainGrid" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+        <Rectangle Fill="#FF292525" HorizontalAlignment="Left" Height="425" Margin="0,26,0,-1.4" Stroke="#FF292525" VerticalAlignment="Top" Width="49"/>
+        <Button x:Name="STPbuttonSidebar" ToolTip="Редактирование STP" 
+        HorizontalAlignment="Left" Margin="6,34,0,0"  
+        VerticalAlignment="Top" Width="34" Height="38"
+        BorderBrush="#00707070" Foreground="#00000000">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <!-- Убираем синий прямоугольник выделения -->
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://siteoforigin:,,,/img/STPbuttonIco.png" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <!-- Фоновое изображение -->
+                                    <Border Background="{TemplateBinding Background}" />
+                                </Grid>
+                                <!-- Триггер на изменение изображения при наведении -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/STPbuttonIcoHover.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Button x:Name="KMPSbuttonSidebar" ToolTip="Редактирование 3Д-моделей Компас" 
+        HorizontalAlignment="Left" Margin="3,85,0,0"  
+        VerticalAlignment="Top" Width="42" Height="43"
+        BorderBrush="#00707070" Foreground="#00000000">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <!-- Убираем стандартный стиль -->
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://siteoforigin:,,,/img/kompasIco.png" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <!-- Используем фон кнопки -->
+                                    <Border Background="{TemplateBinding Background}" />
+                                </Grid>
+                                <!-- Триггеры -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/kompasIcoHover.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
 
-        <Grid Grid.Row="0" Background="#2F3136" Margin="46,0,0,424.6" Grid.RowSpan="2">
-            <Label x:Name="TitelLabel" Content="STEP-corrector" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White"/>
-            <Button Style="{DynamicResource CloseButtonStyle1}" x:Name="ButtonQuit" Content="X" 
-                    HorizontalAlignment="Left" Width="28" BorderThickness="0,0,0,0" ClipToBounds="True" 
-                    SnapsToDevicePixels="True" Grid.RowSpan="1" Foreground="White"  FontSize="20" FontFamily="Corbel" 
-                    Height="25" Margin="725,0,0,0" VerticalAlignment="Top" Click="ButtonQuit_Click" 
-                    />
-            <Button Style="{DynamicResource CloseButtonStyle1}" x:Name="ButtonCollaps" Content="__" 
-                HorizontalAlignment="Left" Width="29" BorderThickness="0,0,0,0" ClipToBounds="True" 
-                SnapsToDevicePixels="True" Grid.RowSpan="1" Foreground="White"  FontSize="20" FontFamily="Corbel" 
-                Height="25" Margin="695,0,0,0" VerticalAlignment="Top" Click="ButtonCollaps_Click" 
-                    />
-            <Button Style="{DynamicResource ListButtonStyle}" x:Name="ButtonAutocorrecrList" Content="" 
-                HorizontalAlignment="Left" Width="30" BorderThickness="0,0,0,0" ClipToBounds="True" 
-                SnapsToDevicePixels="True" Grid.RowSpan="1" Foreground="White"  FontSize="20" FontFamily="Corbel" 
-                Height="25" Margin="664,0,0,0" VerticalAlignment="Top" Click="ButtonAutocorrecrList_Click" BorderBrush="White" RenderTransformOrigin="0.5,0.5" 
-                    >
-                <Button.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Button.RenderTransform>
+
+        <Rectangle Fill="White" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="800"/>
+        <Label x:Name="TitelLabel" Content="STEP-corrector (beta v7.0)" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF030303" Margin="44,0,0,0" Background="Transparent"/>
+        <Image HorizontalAlignment="Left" Height="23" Margin="12,2,0,0" VerticalAlignment="Top" Width="23" Source="pack://siteoforigin:,,,/img/Union.png"/>
+        <Button Style="{DynamicResource CloseButtonStyle}" x:Name="ButtonQuit" Content="X"
+                        HorizontalAlignment="Left" Width="28" BorderThickness="0,0,0,0" ClipToBounds="True"
+                        SnapsToDevicePixels="True" Grid.RowSpan="1" Foreground="White"  FontSize="20" FontFamily="Corbel"
+                        Height="25" Margin="772,0,0,0" VerticalAlignment="Top" Click="ButtonQuit_Click"
+                        ToolTip="Выход" 
+                />
+        <Button Style="{DynamicResource CloseButtonStyle}" x:Name="ButtonCollaps" Content="__"
+                        HorizontalAlignment="Left" Width="29" BorderThickness="0,0,0,0" ClipToBounds="True"
+                        SnapsToDevicePixels="True" Grid.RowSpan="1" Foreground="White"  FontSize="20" FontFamily="Corbel"
+                        Height="25" Margin="742,0,0,0" VerticalAlignment="Top" Click="ButtonCollaps_Click"
+                        ToolTip="Свернуть" 
+                />
+        <Rectangle Fill="#FFC3C3C3" HorizontalAlignment="Left" Height="1" Margin="0,26,0,0" VerticalAlignment="Top" Width="800"/>
+        <Image Height="32" Margin="0,0,126,4.6" VerticalAlignment="Bottom" Width="32" Source="pack://siteoforigin:,,,/img/Union.png" HorizontalAlignment="Right"/>
+        <Label Content="Группа ПТК" HorizontalAlignment="Left" Margin="674,411,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Cambria Math" Background="#00000000" Foreground="DarkRed"/>
+        <TextBlock Text="ПРОМЫШЛЕННО-ИНЖИНИРИНГОВЫЙ ХОЛДИНГ В ТРАНСПОРТНОЙ ОТРАСЛИ"
+                           HorizontalAlignment="Left"
+                           Margin="680,429,0,0"
+                           VerticalAlignment="Top"
+                           FontSize="6"
+                           TextWrapping="Wrap" />
+
+
+        <Grid x:Name="STEPgrid" Margin="0,0,0,-0.4" OpacityMask="Black">
+
+            <Button Style="{DynamicResource CloseButtonStyle}" x:Name="ButtonList"
+            HorizontalAlignment="Left" Width="22" BorderThickness="0,0,0,0" ClipToBounds="True"
+            SnapsToDevicePixels="True" Grid.RowSpan="1" Foreground="White"  FontSize="20" FontFamily="Corbel"
+            Height="25" Margin="720,0,0,0" VerticalAlignment="Top" ToolTip="Открыть список автозамены" Click="ButtonAutocorrecrList_Click">
                 <Button.Background>
-                    <ImageBrush ImageSource="pack://siteoforigin:,,,/listIcon.png"/>
+                    <ImageBrush ImageSource="pack://siteoforigin:,,,/img/listIcon.png"/>
                 </Button.Background>
             </Button>
-        </Grid>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="39*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-
-
-            <Button Style="{DynamicResource ImportButtonStyle}" Content="Загрузить STEP" HorizontalAlignment="Left" 
-            Margin="120,261,0,0" VerticalAlignment="Top" 
-            Width="200" Height="60" 
-            FontSize="20" FontFamily="Constantia" Click="Button_Click"/>
-
-
-            <Image HorizontalAlignment="Left" Margin="143,87,0,0" VerticalAlignment="Top" Height="150" Source="/folderIcon.png" />
-            <Rectangle Stroke="DarkRed" Fill="DarkRed" Width="3" Height="300" Margin="402,62,375,62.8"/>
-
-            <Label Content="Исправить STEP-файлы:" HorizontalAlignment="Left" Margin="434,81,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia">
-                <Label.ToolTip>
-                    Отметьте файлы, которые необходимо исправить
-                </Label.ToolTip>
+            <Button Style="{DynamicResource ImportButtonStyle}" Content="Загрузить STEP" HorizontalAlignment="Left"
+                        Margin="124,283,0,0" VerticalAlignment="Top"
+                        Width="200" Height="60"
+                        FontSize="20" FontFamily="Constantia" Click="Button_Click"/>
+            <Image HorizontalAlignment="Left" Margin="148,110,0,0" VerticalAlignment="Top" Height="150" Source="pack://siteoforigin:,,,/img/folderIcon.png" />
+            <Rectangle Stroke="DarkRed" Fill="DarkRed" Width="3" Height="300" Margin="390,70,407,80"/>
+            <Label Content="Исправить STEP-файлы:" HorizontalAlignment="Left" Margin="434,80,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia">
+                <Label.ToolTip>Отметьте файлы, которые необходимо исправить</Label.ToolTip>
             </Label>
-            <ListBox x:Name="FilesListBox" Height="130" BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left" Width="260" Margin="440,118,0,176.8" SelectionMode="Single" SelectionChanged="FilesListBox_SelectionChanged">
+            <ListBox x:Name="FilesListBox" BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left" Width="260" Margin="440,129,0,191" SelectionMode="Single" SelectionChanged="FilesListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="0">
@@ -84,44 +147,36 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-
-            <Button Style="{DynamicResource ImportButtonStyle}" Content="Исправить" HorizontalAlignment="Left" 
-                Margin="440,261,0,0" VerticalAlignment="Top" 
-                Foreground="White" Width="200" Height="60" 
-                FontSize="20" FontFamily="Constantia" Click="Button_Click_3"                    
+            <Button Style="{DynamicResource ImportButtonStyle}" Content="Исправить" HorizontalAlignment="Left"
+                        Margin="440,283,0,0" VerticalAlignment="Top"
+                        Foreground="White" Width="200" Height="60"
+                        FontSize="20" FontFamily="Constantia" Click="Button_Click_3"/>
+            <Button Style="{DynamicResource ImportButtonStyle}" Content="Выбрать всё" HorizontalAlignment="Left"
+                        Margin="708,129,0,0" VerticalAlignment="Top"
+                        Foreground="White" Width="85" Height="30" FontFamily="Constantia"
+                        Click="Button_Click_1"
+                        ToolTip="Отметить все файлы"     
+                        />
+            <Button Style="{DynamicResource ImportButtonStyle}" Content="Отменить всё" HorizontalAlignment="Left"
+                        Margin="708,163,0,0" VerticalAlignment="Top"
+                        Foreground="White" Width="85" Height="30" FontFamily="Constantia"
+                        Click="Button_Click_2"
+                        ToolTip="Снять выбор со всех отмеченных файлов"     
+                        />
+            <Button x:Name="ButtonClear" Style="{DynamicResource ImportButtonStyle}" Content="Очистить" HorizontalAlignment="Left"
+                        Margin="708,230,0,0" VerticalAlignment="Top"
+                        Foreground="White" Width="85" Height="30" FontFamily="Constantia"
+                        Click="Button_Clear"
+                        ToolTip="Очистить список"                        />
+            <Button x:Name="ButtonExclude" Style="{DynamicResource ImportButtonStyle}" Content="Исключить" HorizontalAlignment="Left"
+                        Margin="708,197,0,0" VerticalAlignment="Top"
+                        Foreground="White" Width="85" Height="30" FontFamily="Constantia"
+                        Click="Button_Exclude"
+                        ToolTip="Удалить из списка отмеченные файлы"
                     />
-            <Button Style="{DynamicResource ImportButtonStyle}" Content="Выбрать всё" HorizontalAlignment="Left" 
-            Margin="705,118,0,0" VerticalAlignment="Top"
-            Foreground="White" Width="85" Height="30" FontFamily="Constantia" 
-            Click="Button_Click_1" Grid.ColumnSpan="2"/>
-
-            <Button Style="{DynamicResource ImportButtonStyle}" Content="Отменить всё" HorizontalAlignment="Left" 
-            Margin="705,153,0,0" VerticalAlignment="Top"
-            Foreground="White" Width="85" Height="30" FontFamily="Constantia" 
-            Click="Button_Click_2" Grid.ColumnSpan="2"/>
-
-            <Image Height="32" Margin="0,0,120,5" VerticalAlignment="Bottom" Width="32" Source="/Union.png" HorizontalAlignment="Right"/>
-            <Label Content="Группа ПТК" HorizontalAlignment="Left" Margin="662,386,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Cambria Math" Background="#00000000" Foreground="DarkRed"/>
-            <TextBlock Text="ПРОМЫШЛЕННО-ИНЖИНИРИНГОВЫЙ ХОЛДИНГ В ТРАНСПОРТНОЙ ОТРАСЛИ"
-            HorizontalAlignment="Left"
-            Margin="668,404,1,0"
-            VerticalAlignment="Top"
-            FontSize="6"
-            TextWrapping="Wrap" />
-
-            <Button x:Name="ButtonClear" Style="{DynamicResource ImportButtonStyle}" Content="Очистить" HorizontalAlignment="Left" 
-                Margin="705,218,0,0" VerticalAlignment="Top"
-                Foreground="White" Width="85" Height="30" FontFamily="Constantia" 
-                Click="Button_Clear" Grid.ColumnSpan="2"/>
-            <Button x:Name="ButtonExclude" Style="{DynamicResource ImportButtonStyle}" Content="Исключить" HorizontalAlignment="Left" 
-                Margin="705,185,0,0" VerticalAlignment="Top" 
-                Foreground="White" Width="85" Height="30" FontFamily="Constantia" 
-                Click="Button_Exclude" Grid.ColumnSpan="2"/>
+            <Label Content="Выберите STEP-файлы:" HorizontalAlignment="Left" Margin="113,80,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
+            <Rectangle Fill="White" HorizontalAlignment="Left" Height="2" Margin="0,78,0,0" VerticalAlignment="Top" Width="49"/>
 
         </Grid>
-        <Rectangle Fill="#2F3136" HorizontalAlignment="Left" Height="450" Margin="0,0,0,-0.4" VerticalAlignment="Top" Width="41" Grid.RowSpan="2"/>
-        <Button Content="STEP" HorizontalAlignment="Left" Margin="2,45.2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="37"/>
-        <Image HorizontalAlignment="Left" Height="21" Margin="9,2,0,0" VerticalAlignment="Top" Width="21" Source="Union.png"/>
-        <Rectangle Fill="#FF515868" HorizontalAlignment="Left" Height="3" Margin="1,2.2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="39"/>
     </Grid>
 </Window>
