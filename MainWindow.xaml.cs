@@ -235,6 +235,10 @@ namespace STEP_corrector
         {
 
         }
+        private void ModelListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
 
         private void Button_Exclude(object sender, RoutedEventArgs e)
         {
@@ -260,6 +264,36 @@ namespace STEP_corrector
 
                 MessageBox.Show("Отмеченные файлы успешно удалены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        private void ButtonFixModel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GetAllModelButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UnselectAllModelButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonClearListModel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonExcludeModel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonLoadKompas_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

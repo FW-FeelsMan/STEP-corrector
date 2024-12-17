@@ -32,3 +32,4 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\kompasIco.png
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\STPbuttonIcoHover.png
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\kompasIcoHover.png
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\kompasIcoLabel.png

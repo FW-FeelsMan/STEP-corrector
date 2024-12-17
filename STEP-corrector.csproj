@@ -13,6 +13,7 @@
   <ItemGroup>
     <None Remove="img\kompasIco.png" />
     <None Remove="img\kompasIcoHover.png" />
+    <None Remove="img\kompasIcoLabel.png" />
     <None Remove="img\STPbuttonIcoHover.png" />
   </ItemGroup>
 
@@ -39,6 +40,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="img\kompasIcoHover.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="img\kompasIcoLabel.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="img\listIcon.png">
