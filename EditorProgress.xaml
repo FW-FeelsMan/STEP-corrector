@@ -9,10 +9,10 @@
 
         <Grid Margin="0,25,0,0">
             <Grid.Background>
-                <ImageBrush ImageSource="img/background.png"/>
+                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/background.png"/>
             </Grid.Background>
         </Grid>        
         <Label Content="Обработка..." HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontSize="20" FontWeight="Bold"/>
-        <Image gif:ImageBehavior.AnimatedSource="img/load.gif" Width="200" Height="200" />
+        <Image gif:ImageBehavior.AnimatedSource="pack://siteoforigin:,,,/img/load.gif" Width="200" Height="200" />
     </Grid>
 </Window>

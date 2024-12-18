@@ -1,12 +1,4 @@
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\AutoCorrect.txt
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\background.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\backgroundDark.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\faviconV2.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\folderIcon.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\listIcon.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\STPbuttonIco.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\Union.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\load.gif
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\STEP-corrector.pdb
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\WpfAnimatedGif.dll
@@ -28,8 +20,4 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.As
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csproj.CopyComplete
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.pdb
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\kompasIco.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\STPbuttonIcoHover.png
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\kompasIcoHover.png
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\img\kompasIcoLabel.png

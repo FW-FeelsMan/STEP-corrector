@@ -13,13 +13,30 @@ namespace STEP_corrector
 {
     public partial class MainWindow : Window
     {
-        private ObservableCollection<StepFile> _files = new ObservableCollection<StepFile>();
+        private ObservableCollection<StepFile> _filesSTP = new ObservableCollection<StepFile>();
+        private ObservableCollection<KompasModel> _kompasFiles = new ObservableCollection<KompasModel>();
         private Editor editor = new Editor();
 
+        #region header
         public MainWindow()
         {
             InitializeComponent();
-            FilesListBox.ItemsSource = _files;
+            FilesSTPListBox.ItemsSource = _filesSTP;
+            ModelListBox.ItemsSource = _kompasFiles;
+
+            STEPkompas.Visibility = Visibility.Hidden;
+            STEPgrid.Visibility = Visibility.Visible;
+        }
+        private void KMPSbuttonSidebar_Click(object sender, RoutedEventArgs e)
+        {
+            STEPgrid.Visibility = Visibility.Hidden;
+            STEPkompas.Visibility = Visibility.Visible;
+        }
+
+        private void STPbuttonSidebar_Click(object sender, RoutedEventArgs e)
+        {
+            STEPkompas.Visibility = Visibility.Hidden;
+            STEPgrid.Visibility = Visibility.Visible;
         }
 
         private void ButtonQuit_Click(object sender, RoutedEventArgs e)
@@ -54,8 +71,10 @@ namespace STEP_corrector
                 this.DragMove();
             }
         }
+        #endregion header
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        #region STP
+        private void ButtonLoadSTP_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -71,13 +90,13 @@ namespace STEP_corrector
                     var fileName = Path.GetFileNameWithoutExtension(filePath);
                     var fileExtension = Path.GetExtension(filePath);
 
-                    if (_files.Any(f => f.FileName == fileName && f.FileExtension == fileExtension))
+                    if (_filesSTP.Any(f => f.FileName == fileName && f.FileExtension == fileExtension))
                     {
                         MessageBox.Show($"Файл {fileName}{fileExtension} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     else
                     {
-                        _files.Add(new StepFile
+                        _filesSTP.Add(new StepFile
                         {
                             FileName = fileName,
                             FileExtension = fileExtension,
@@ -89,25 +108,25 @@ namespace STEP_corrector
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ButtonUnSelectAllSTP_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var file in _files)
+            foreach (var file in _filesSTP)
             {
                 file.IsChecked = true;
             }
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void ButtonUnSelectSTP_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var file in _files)
+            foreach (var file in _filesSTP)
             {
                 file.IsChecked = false;
             }
         }
 
-        private void Button_Clear(object sender, RoutedEventArgs e)
+        private void ButtonClearSTPlist_Click(object sender, RoutedEventArgs e)
         {
-            if (_files.Count == 0)
+            if (_filesSTP.Count == 0)
             {
                 MessageBox.Show("Список уже пуст.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
@@ -120,20 +139,20 @@ namespace STEP_corrector
 
             if (result == MessageBoxResult.Yes)
             {
-                _files.Clear();
+                _filesSTP.Clear();
                 MessageBox.Show("Список файлов успешно очищен.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void ButtonFixSTP_Click(object sender, RoutedEventArgs e)
         {
-            if (_files.Count == 0)
+            if (_filesSTP.Count == 0)
             {
                 MessageBox.Show("Отсутствуют файлы для редактирования. Пожалуйста, добавьте файлы.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var checkedFiles = _files.Where(file => file.IsChecked).ToList();
+            var checkedFiles = _filesSTP.Where(file => file.IsChecked).ToList();
 
             if (checkedFiles.Count == 0)
             {
@@ -181,6 +200,49 @@ namespace STEP_corrector
             }
         }
 
+        
+
+        private void CreateBackup(string filePath)
+        {
+            try
+            {
+                string backupPath = $"{filePath}.bak";
+                File.Copy(filePath, backupPath, overwrite: true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при создании резервной копии для файла {filePath}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void FilesSTPListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void ButtonExcludeSTP_Click(object sender, RoutedEventArgs e)
+        {
+            var checkedFiles = _filesSTP.Where(file => file.IsChecked).ToList();
+
+            if (checkedFiles.Count == 0)
+            {
+                MessageBox.Show("Нет отмеченных файлов для удаления.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var result = MessageBox.Show($"Вы уверены, что хотите удалить {checkedFiles.Count} отмеченных файлов?",
+                                         "Удаление файлов",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (var file in checkedFiles)
+                {
+                    _filesSTP.Remove(file);
+                }
+
+                MessageBox.Show("Отмеченные файлы успешно удалены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
         private void StartEditingFiles(List<StepFile> checkedFiles)
         {
             var editorProgress = new EditorProgress
@@ -217,65 +279,20 @@ namespace STEP_corrector
 
             worker.RunWorkerAsync();
         }
-
-        private void CreateBackup(string filePath)
-        {
-            try
-            {
-                string backupPath = $"{filePath}.bak";
-                File.Copy(filePath, backupPath, overwrite: true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при создании резервной копии для файла {filePath}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void FilesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+        #endregion STP
+        #region 3Dmodel                     
         private void ModelListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
-
-        private void Button_Exclude(object sender, RoutedEventArgs e)
-        {
-            var checkedFiles = _files.Where(file => file.IsChecked).ToList();
-
-            if (checkedFiles.Count == 0)
-            {
-                MessageBox.Show("Нет отмеченных файлов для удаления.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            var result = MessageBox.Show($"Вы уверены, что хотите удалить {checkedFiles.Count} отмеченных файлов?",
-                                         "Удаление файлов",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                foreach (var file in checkedFiles)
-                {
-                    _files.Remove(file);
-                }
-
-                MessageBox.Show("Отмеченные файлы успешно удалены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-
         private void ButtonFixModel_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void GetAllModelButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void UnselectAllModelButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -293,7 +310,37 @@ namespace STEP_corrector
 
         private void ButtonLoadKompas_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Выберите файл 3D модели Компас",
+                Filter = "3D Model Files (*.a3d;*.m3d)|*.a3d;*.m3d|All Files (*.*)|*.*",
+                Multiselect = true
+            };
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach (var filePath in openFileDialog.FileNames)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(filePath);
+                    var fileExtension = Path.GetExtension(filePath);
+
+                    if (_kompasFiles.Any(f => f.FileName == fileName && f.FileExtension == fileExtension))
+                    {
+                        MessageBox.Show($"Файл {fileName}{fileExtension} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        _kompasFiles.Add(new KompasModel
+                        {
+                            FileName = fileName,
+                            FileExtension = fileExtension,
+                            FilePath = filePath,
+                            IsChecked = false
+                        });
+                    }
+                }
+            }
         }
+        #endregion 3Dmodel
     }
 }
