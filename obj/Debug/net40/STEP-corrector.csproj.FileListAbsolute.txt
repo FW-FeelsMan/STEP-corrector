@@ -21,3 +21,4 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.pdb
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\DotNetZip.dll

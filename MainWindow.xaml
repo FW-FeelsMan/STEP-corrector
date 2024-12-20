@@ -151,10 +151,10 @@
                         Margin="440,283,0,0" VerticalAlignment="Top"
                         Foreground="White" Width="200" Height="60"
                         FontSize="20" FontFamily="Constantia" Click="ButtonFixSTP_Click"/>
-            <Button x:Name="ButtonUnSelectAllSTP" Style="{DynamicResource ImportButtonStyle}" Content="Выбрать всё" HorizontalAlignment="Left"
+            <Button x:Name="ButtonSelectAllSTP" Style="{DynamicResource ImportButtonStyle}" Content="Выбрать всё" HorizontalAlignment="Left"
                         Margin="708,129,0,0" VerticalAlignment="Top"
                         Foreground="White" Width="85" Height="30" FontFamily="Constantia"
-                        Click="ButtonUnSelectAllSTP_Click"
+                        Click="ButtonSelectAllSTP_Click"
                         ToolTip="Отметить все файлы"     
                         />
             <Button x:Name="ButtonUnSelectSTP" Style="{DynamicResource ImportButtonStyle}" Content="Отменить всё" HorizontalAlignment="Left"

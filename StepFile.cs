@@ -6,7 +6,7 @@ namespace STEP_corrector
     {
         private string _fileName;
         private string _fileExtension;
-        private string _filePath;  // Новое свойство для пути к файлу
+        private string _filePath;  
         private bool _isChecked;
 
         public string FileName
@@ -35,7 +35,7 @@ namespace STEP_corrector
             }
         }
 
-        public string FilePath  // Свойство для хранения пути к файлу
+        public string FilePath  
         {
             get { return _filePath; }
             set
@@ -43,7 +43,7 @@ namespace STEP_corrector
                 if (_filePath != value)
                 {
                     _filePath = value;
-                    OnPropertyChanged(nameof(FilePath)); // Уведомляем об изменении пути
+                    OnPropertyChanged(nameof(FilePath)); 
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace STEP_corrector
                 if (_isChecked != value)
                 {
                     _isChecked = value;
-                    OnPropertyChanged(nameof(IsChecked)); // Уведомляем об изменении состояния чекбокса
+                    OnPropertyChanged(nameof(IsChecked)); 
                 }
             }
         }

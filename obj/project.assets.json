@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.0": {
+      "DotNetZip/1.16.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/DotNetZip.dll": {}
+        },
+        "runtime": {
+          "lib/net40/DotNetZip.dll": {}
+        }
+      },
       "Microsoft.NETFramework.ReferenceAssemblies.net40/1.0.3": {
         "type": "package",
         "build": {
@@ -20,6 +29,23 @@
     }
   },
   "libraries": {
+    "DotNetZip/1.16.0": {
+      "sha512": "CS9sjjXF23FLIbwlLT5k/jXBYxVnLMn01lyAvN/hxFM+UDvSicjTPB9ZMA+Wp/QlvBPbD2pzkAXUp1O50gP/Lw==",
+      "type": "package",
+      "path": "dotnetzip/1.16.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "dotnetzip.1.16.0.nupkg.sha512",
+        "dotnetzip.nuspec",
+        "lib/net40/DotNetZip.dll",
+        "lib/net40/DotNetZip.pdb",
+        "lib/net40/DotNetZip.xml",
+        "lib/netstandard2.0/DotNetZip.dll",
+        "lib/netstandard2.0/DotNetZip.pdb",
+        "lib/netstandard2.0/DotNetZip.xml"
+      ]
+    },
     "Microsoft.NETFramework.ReferenceAssemblies.net40/1.0.3": {
       "sha512": "3ctXnCpHdoYJNH9ATfXKwckkkdHvHc1Xls12QB9kf1tjh3b+VzxtiwpkZN4GxOawakfH6CJAkqhlDKSiz6Ujbg==",
       "type": "package",
@@ -453,6 +479,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.0": [
+      "DotNetZip >= 1.16.0",
       "Microsoft.NETFramework.ReferenceAssemblies.net40 >= 1.0.3",
       "WpfAnimatedGif >= 2.0.2"
     ]
@@ -489,6 +516,10 @@
     "frameworks": {
       "net40": {
         "dependencies": {
+          "DotNetZip": {
+            "target": "Package",
+            "version": "[1.16.0, )"
+          },
           "Microsoft.NETFramework.ReferenceAssemblies.net40": {
             "target": "Package",
             "version": "[1.0.3, )"
