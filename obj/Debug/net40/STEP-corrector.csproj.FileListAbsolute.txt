@@ -1,6 +1,7 @@
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\AutoCorrect.txt
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\STEP-corrector.pdb
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\DotNetZip.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\WpfAnimatedGif.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\Editor.baml
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\EditorProgress.baml
@@ -20,5 +21,3 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.As
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csproj.CopyComplete
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.pdb
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\DotNetZip.dll

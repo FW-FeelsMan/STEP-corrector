@@ -16,6 +16,8 @@ namespace STEP_corrector
         private ObservableCollection<StepFile> _filesSTP = new ObservableCollection<StepFile>();
         private ObservableCollection<KompasModel> _kompasFiles = new ObservableCollection<KompasModel>();
 
+        private ObservableCollection<KompasModelProp> _kompasFilesProp = new ObservableCollection<KompasModelProp>();
+
         private Editor editor = new Editor();
         private EditorModel editorModel = new EditorModel();
 
@@ -23,22 +25,33 @@ namespace STEP_corrector
         public MainWindow()
         {
             InitializeComponent();
+            LabelHintText.Visibility = Visibility.Visible;
+
             FilesSTPListBox.ItemsSource = _filesSTP;
             ModelListBox.ItemsSource = _kompasFiles;
 
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
+            STEPprop.Visibility = Visibility.Hidden;
         }
         private void KMPSbuttonSidebar_Click(object sender, RoutedEventArgs e)
         {
             STEPgrid.Visibility = Visibility.Hidden;
             STEPkompas.Visibility = Visibility.Visible;
+            STEPprop.Visibility = Visibility.Hidden;
         }
 
         private void STPbuttonSidebar_Click(object sender, RoutedEventArgs e)
         {
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
+            STEPprop.Visibility = Visibility.Hidden;
+        }
+        private void KMPSbuttonSidebarProps_Click(object sender, RoutedEventArgs e)
+        {
+            STEPkompas.Visibility = Visibility.Hidden;
+            STEPgrid.Visibility = Visibility.Hidden;
+            STEPprop.Visibility = Visibility.Visible;
         }
 
         private void ButtonQuit_Click(object sender, RoutedEventArgs e)
@@ -314,8 +327,7 @@ namespace STEP_corrector
                     for (int i = 0; i < checkedModels.Count; i++)
                     {
                         var model = checkedModels[i];
-                        CreateBackup(model.FilePath); // Создаем резервную копию
-
+                        CreateBackup(model.FilePath); 
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
                             progressWindow.UpdateProgress(i + 1);
@@ -326,14 +338,14 @@ namespace STEP_corrector
                 worker.RunWorkerCompleted += (s, args) =>
                 {
                     progressWindow.Close();
-                    StartEditingModel(checkedModels); // Здесь вызываем редактирование
+                    StartEditingModel(checkedModels); 
                 };
 
                 worker.RunWorkerAsync();
             }
             else
             {
-                StartEditingModel(checkedModels); // Если резервные копии не нужны
+                StartEditingModel(checkedModels); 
             }
         }
         private void GetAllModelButton_Click(object sender, RoutedEventArgs e)
@@ -470,6 +482,82 @@ namespace STEP_corrector
 
             worker.RunWorkerAsync();
         }
+
         #endregion 3Dmodel
+
+        #region 3DmodelProperties
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void ButtonLoadKompasModelProp_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Выберите файл 3D модели Компас",
+                Filter = "3D Model Files (*.a3d;*.m3d)|*.a3d;*.m3d|All Files (*.*)|*.*",
+                Multiselect = true
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach (var filePathProp in openFileDialog.FileNames)
+                {
+                    var fileNameProp = Path.GetFileNameWithoutExtension(filePathProp);
+                    var fileExtensionProp = Path.GetExtension(filePathProp);
+
+                    if (_kompasFilesProp.Any(f => f.FilePathProp.Equals(filePathProp, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        MessageBox.Show($"Файл {filePathProp} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        _kompasFilesProp.Add(new KompasModelProp
+                        {
+                            FileNameProp = fileNameProp,
+                            FileExtensionProp = fileExtensionProp,
+                            FilePathProp = filePathProp,
+                            IsCheckedProp = false
+                        });
+                    }
+                }
+            }
+        }
+        #endregion 3DmodelProperties
+
+        private void ButtonApplyNewProp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void InputPropField_GotFocus(object sender, RoutedEventArgs e)
+        {
+            // Скрываем подсказку, если текст не пустой
+            if (!string.IsNullOrWhiteSpace(InputPropField.Text))
+            {
+                LabelHintText.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void InputPropField_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Показываем подсказку, если текст пустой
+            if (string.IsNullOrWhiteSpace(InputPropField.Text))
+            {
+                LabelHintText.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void InputPropField_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Скрываем подсказку, если текст не пустой
+            if (!string.IsNullOrWhiteSpace(InputPropField.Text))
+            {
+                LabelHintText.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                LabelHintText.Visibility = Visibility.Visible; // Показываем подсказку, если текст пустой
+            }
+        }
     }
 }

@@ -40,16 +40,14 @@ namespace STEP_corrector
                     var lines = ReadFileWithEncoding(metaFilePath, Encoding.BigEndianUnicode);
                     ProcessMetaProductInfo(lines);
 
-                    SaveFileWithEncoding(metaFilePath, lines, Encoding.BigEndianUnicode);
-                   //MessageBox.Show("Файл MetaProductInfo успешно обработан.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    SaveFileWithEncoding(metaFilePath, lines, Encoding.BigEndianUnicode);                   
                 }
                 else
                 {
                     MessageBox.Show("Файл MetaProductInfo не найден.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                string archivePath = RepackToOriginalFormat(extractedDir, modelPath);
-                //MessageBox.Show($"Файл успешно обработан и упакован: {archivePath}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                string archivePath = RepackToOriginalFormat(extractedDir, modelPath);                
             }
             catch (Exception ex)
             {
