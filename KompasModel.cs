@@ -9,6 +9,8 @@ namespace STEP_corrector
         private string _filePath;  
         private bool _isChecked;
 
+        
+
         public string FileName
         {
             get { return _fileName; }

@@ -15,8 +15,7 @@ namespace STEP_corrector
     {
         private ObservableCollection<StepFile> _filesSTP = new ObservableCollection<StepFile>();
         private ObservableCollection<KompasModel> _kompasFiles = new ObservableCollection<KompasModel>();
-
-        private ObservableCollection<KompasModelProp> _kompasFilesProp = new ObservableCollection<KompasModelProp>();
+        public ObservableCollection<KompasModelProp> KompasFilesProp { get; } = new ObservableCollection<KompasModelProp>();
 
         private Editor editor = new Editor();
         private EditorModel editorModel = new EditorModel();
@@ -25,14 +24,15 @@ namespace STEP_corrector
         public MainWindow()
         {
             InitializeComponent();
-            LabelHintText.Visibility = Visibility.Visible;
 
             FilesSTPListBox.ItemsSource = _filesSTP;
             ModelListBox.ItemsSource = _kompasFiles;
+            DataGrid.ItemsSource = KompasFilesProp;
 
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
+            progressBarWaiting.Visibility = Visibility.Hidden;
         }
         private void KMPSbuttonSidebar_Click(object sender, RoutedEventArgs e)
         {
@@ -179,12 +179,7 @@ namespace STEP_corrector
 
             if (result == MessageBoxResult.Yes)
             {
-                var progressWindow = new ProgressWindow(checkedFiles.Count)
-                {
-                    Owner = this
-                };
-
-                progressWindow.Show();
+                progressBarWaiting.Visibility = Visibility.Visible;
 
                 var worker = new BackgroundWorker();
                 worker.DoWork += (s, args) =>
@@ -196,14 +191,14 @@ namespace STEP_corrector
 
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            progressWindow.UpdateProgress(i + 1);
+                            // Обновление UI может быть здесь, если необходимо
                         }));
-                }
+                    }
                 };
 
                 worker.RunWorkerCompleted += (s, args) =>
                 {
-                    progressWindow.Close();
+                    progressBarWaiting.Visibility = Visibility.Hidden;
                     StartEditingFiles(checkedFiles);
                 };
 
@@ -214,9 +209,6 @@ namespace STEP_corrector
                 StartEditingFiles(checkedFiles);
             }
         }
-
-        
-
         private void CreateBackup(string filePath)
         {
             try
@@ -260,12 +252,7 @@ namespace STEP_corrector
         }
         private void StartEditingFiles(List<StepFile> checkedFiles)
         {
-            var editorProgress = new EditorProgress
-            {
-                Owner = this
-            };
-
-            editorProgress.Show();
+            progressBarWaiting.Visibility = Visibility.Visible;
 
             var worker = new BackgroundWorker();
             worker.DoWork += (s, args) =>
@@ -288,11 +275,56 @@ namespace STEP_corrector
 
             worker.RunWorkerCompleted += (s, args) =>
             {
-                editorProgress.Close();
+                progressBarWaiting.Visibility = Visibility.Hidden; // Скрываем progressBarWaiting
                 MessageBox.Show("Обработка завершена!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             };
 
             worker.RunWorkerAsync();
+        }
+        private void FilesSTPListBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy; 
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None; 
+            }
+        }
+
+        private void FilesSTPListBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (var filePath in files)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(filePath);
+                    var fileExtension = Path.GetExtension(filePath).ToLower(); 
+
+                    if (fileExtension != ".stp" && fileExtension != ".step")
+                    {
+                        MessageBox.Show($"Файл {filePath} имеет недопустимое расширение. Пожалуйста, перетащите файлы с расширениями .stp или .step.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        continue; 
+                    }
+                    if (_filesSTP.Any(f => f.FileName == fileName && f.FileExtension == fileExtension))
+                    {
+                        MessageBox.Show($"Файл {fileName}{fileExtension} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        _filesSTP.Add(new StepFile
+                        {
+                            FileName = fileName,
+                            FileExtension = fileExtension,
+                            FilePath = filePath,
+                            IsChecked = false
+                        });
+                    }
+                }
+            }
         }
         #endregion STP
         #region 3Dmodel                     
@@ -314,12 +346,7 @@ namespace STEP_corrector
 
             if (result == MessageBoxResult.Yes)
             {
-                var progressWindow = new ProgressWindow(checkedModels.Count)
-                {
-                    Owner = this
-                };
-
-                progressWindow.Show();
+                progressBarWaiting.Visibility = Visibility.Visible; // Показываем progressBarWaiting
 
                 var worker = new BackgroundWorker();
                 worker.DoWork += (s, args) =>
@@ -327,27 +354,29 @@ namespace STEP_corrector
                     for (int i = 0; i < checkedModels.Count; i++)
                     {
                         var model = checkedModels[i];
-                        CreateBackup(model.FilePath); 
+                        CreateBackup(model.FilePath); // Создаем резервную копию
+
+                        // Обновление UI может быть здесь, если необходимо
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            progressWindow.UpdateProgress(i + 1);
+                            // Можно обновить прогресс, если нужно
                         }));
                     }
                 };
 
                 worker.RunWorkerCompleted += (s, args) =>
                 {
-                    progressWindow.Close();
-                    StartEditingModel(checkedModels); 
+                    progressBarWaiting.Visibility = Visibility.Hidden; // Скрываем progressBarWaiting
+                    StartEditingModel(checkedModels); // Начинаем редактирование моделей
                 };
 
                 worker.RunWorkerAsync();
             }
             else
             {
-                StartEditingModel(checkedModels); 
+                StartEditingModel(checkedModels); // Начинаем редактирование моделей без резервного копирования
             }
-        }
+        }       
         private void GetAllModelButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var kompasFile in _kompasFiles)
@@ -446,12 +475,7 @@ namespace STEP_corrector
         }
         private void StartEditingModel(List<KompasModel> checkedModels)
         {
-            var editorProgress = new EditorProgress
-            {
-                Owner = this
-            };
-
-            editorProgress.Show();
+            progressBarWaiting.Visibility = Visibility.Visible; // Показываем progressBarWaiting
 
             var worker = new BackgroundWorker();
             worker.DoWork += (s, args) =>
@@ -466,9 +490,7 @@ namespace STEP_corrector
                     {
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            MessageBox.Show($"Ошибка при обработке файла " +
-                                $"{kompasModel.FileName}{kompasModel.FileExtension}: {ex.Message}", "Ошибка",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show($"Ошибка при обработке файла {kompasModel.FileName}{kompasModel.FileExtension}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         }));
                     }
                 }
@@ -476,20 +498,62 @@ namespace STEP_corrector
 
             worker.RunWorkerCompleted += (s, args) =>
             {
-                editorProgress.Close();
+                progressBarWaiting.Visibility = Visibility.Hidden; // Скрываем progressBarWaiting
                 MessageBox.Show("Обработка завершена!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             };
 
             worker.RunWorkerAsync();
         }
+        private void ModelListBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (var filePath in files)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(filePath);
+                    var fileExtension = Path.GetExtension(filePath).ToLower();
+
+                    if (fileExtension != ".a3d" && fileExtension != ".m3d")
+                    {
+                        MessageBox.Show($"Файл {filePath} имеет недопустимое расширение. Пожалуйста, перетащите файлы с расширениями .a3d или .m3d.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        continue;
+                    }
+
+                    if (_kompasFiles.Any(m => m.FileName == fileName && m.FileExtension == fileExtension))
+                    {
+                        MessageBox.Show($"Файл {fileName}{fileExtension} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        _kompasFiles.Add(new KompasModel
+                        {
+                            FileName = fileName,
+                            FileExtension = fileExtension,
+                            FilePath = filePath,
+                            IsChecked = false
+                        });
+                    }
+                }
+            }
+        }
+        private void ModelListBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
 
         #endregion 3Dmodel
 
         #region 3DmodelProperties
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
-        }
         private void ButtonLoadKompasModelProp_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -506,13 +570,63 @@ namespace STEP_corrector
                     var fileNameProp = Path.GetFileNameWithoutExtension(filePathProp);
                     var fileExtensionProp = Path.GetExtension(filePathProp);
 
-                    if (_kompasFilesProp.Any(f => f.FilePathProp.Equals(filePathProp, StringComparison.OrdinalIgnoreCase)))
+                    if (KompasFilesProp.Any(f => f.FilePathProp.Equals(filePathProp, StringComparison.OrdinalIgnoreCase)))
                     {
                         MessageBox.Show($"Файл {filePathProp} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     else
                     {
-                        _kompasFilesProp.Add(new KompasModelProp
+                        KompasFilesProp.Add(new KompasModelProp
+                        {
+                            FileNameProp = fileNameProp,
+                            FileExtensionProp = fileExtensionProp,
+                            FilePathProp = filePathProp,
+                            IsCheckedProp = false
+                        });
+                    }
+                }
+            }
+        }
+        private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void DataGrid_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void DataGrid_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] filesProp = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (var filePathProp in filesProp)
+                {
+                    var fileNameProp = Path.GetFileNameWithoutExtension(filePathProp);
+                    var fileExtensionProp = Path.GetExtension(filePathProp).ToLower();
+
+                    if (fileExtensionProp != ".a3d" && fileExtensionProp != ".m3d")
+                    {
+                        MessageBox.Show($"Файл {filePathProp} имеет недопустимое расширение. Пожалуйста, перетащите файлы с расширениями .a3d или .m3d.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        continue;
+                    }
+
+                    if (KompasFilesProp.Any(m => m.FileNameProp == fileNameProp && m.FileExtensionProp == fileExtensionProp))
+                    {
+                        MessageBox.Show($"Файл {fileNameProp}{fileExtensionProp} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        KompasFilesProp.Add(new KompasModelProp
                         {
                             FileNameProp = fileNameProp,
                             FileExtensionProp = fileExtensionProp,
@@ -524,40 +638,5 @@ namespace STEP_corrector
             }
         }
         #endregion 3DmodelProperties
-
-        private void ButtonApplyNewProp_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void InputPropField_GotFocus(object sender, RoutedEventArgs e)
-        {
-            // Скрываем подсказку, если текст не пустой
-            if (!string.IsNullOrWhiteSpace(InputPropField.Text))
-            {
-                LabelHintText.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void InputPropField_LostFocus(object sender, RoutedEventArgs e)
-        {
-            // Показываем подсказку, если текст пустой
-            if (string.IsNullOrWhiteSpace(InputPropField.Text))
-            {
-                LabelHintText.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void InputPropField_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Скрываем подсказку, если текст не пустой
-            if (!string.IsNullOrWhiteSpace(InputPropField.Text))
-            {
-                LabelHintText.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                LabelHintText.Visibility = Visibility.Visible; // Показываем подсказку, если текст пустой
-            }
-        }
     }
 }

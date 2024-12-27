@@ -6,12 +6,10 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\WpfAnimatedGif.dl
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\Editor.baml
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\EditorProgress.baml
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\MainWindow.baml
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\ProgressWindow.baml
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\App.baml
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\Editor.g.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\EditorProgress.g.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\MainWindow.g.cs
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\ProgressWindow.g.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\App.g.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector_Content.g.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector_MarkupCompile.cache
@@ -21,3 +19,4 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.As
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csproj.CopyComplete
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.pdb
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache

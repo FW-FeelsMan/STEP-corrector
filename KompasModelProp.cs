@@ -6,8 +6,10 @@ namespace STEP_corrector
     {
         private string _fileNameProp;
         private string _fileExtensionProp;
-        private string _filePathProp;  
+        private string _filePathProp;
         private bool _isCheckedProp;
+
+        public string FullFileName => $"{_fileNameProp}{_fileExtensionProp}";
 
         public string FileNameProp
         {
@@ -18,6 +20,7 @@ namespace STEP_corrector
                 {
                     _fileNameProp = value;
                     OnPropertyChanged(nameof(FileNameProp));
+                    OnPropertyChanged(nameof(FullFileName)); // Уведомляем об изменении
                 }
             }
         }
@@ -31,11 +34,12 @@ namespace STEP_corrector
                 {
                     _fileExtensionProp = value;
                     OnPropertyChanged(nameof(FileExtensionProp));
+                    OnPropertyChanged(nameof(FullFileName)); // Уведомляем об изменении
                 }
             }
         }
 
-        public string FilePathProp  
+        public string FilePathProp
         {
             get { return _filePathProp; }
             set
@@ -43,7 +47,7 @@ namespace STEP_corrector
                 if (_filePathProp != value)
                 {
                     _filePathProp = value;
-                    OnPropertyChanged(nameof(FilePathProp)); 
+                    OnPropertyChanged(nameof(FilePathProp));
                 }
             }
         }
@@ -56,7 +60,7 @@ namespace STEP_corrector
                 if (_isCheckedProp != value)
                 {
                     _isCheckedProp = value;
-                    OnPropertyChanged(nameof(IsCheckedProp)); 
+                    OnPropertyChanged(nameof(IsCheckedProp));
                 }
             }
         }
