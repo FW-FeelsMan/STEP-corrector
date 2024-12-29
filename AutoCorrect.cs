@@ -38,6 +38,7 @@ namespace STEP_corrector
             {
                 MessageBox.Show($"Ошибка при загрузке файла автозамены: {ex.Message}",
                                 "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+               MainWindow.LogError(ex.Message);
             }
         }
 

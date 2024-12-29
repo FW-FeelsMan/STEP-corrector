@@ -271,7 +271,7 @@
 
         </Grid>
 
-        <Grid x:Name="STEPprop" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
+        <Grid x:Name="STEPprop" Margin="0,0,0,0" OpacityMask="Black">
             <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,172,0,0" VerticalAlignment="Top" Width="2"/>
 
             <DataGrid x:Name="DataGrid" HorizontalAlignment="Left" Height="250" Margin="70,90,0,0" 
@@ -287,6 +287,8 @@
                   VerticalGridLinesBrush="#FF688CAF"
                   AllowDrop="True" 
                   DragOver="DataGrid_DragOver" 
+                  SelectionMode="Extended"
+                  KeyDown="DataGridRemove_KeyDown"
                   Drop="DataGrid_Drop">
 
                 <DataGrid.CellStyle>
@@ -296,41 +298,50 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Имя файла" Binding="{Binding FileNameProp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Расширение файла" Binding="{Binding FileExtensionProp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    
-                    <DataGridTextColumn Header="Наименование" Binding="{Binding nomination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Имя файла" Binding="{Binding FileNameProp, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
+                    <DataGridTextColumn Header="Тип файла" Binding="{Binding FileType, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                     <DataGridTextColumn Header="Обозначение" Binding="{Binding Designation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Тип файла" Binding="{Binding typeModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Путь к файлу" Binding="{Binding pathModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Разработал" Binding="{Binding StampAuthor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Проверил" Binding="{Binding CheckedBy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Т.контр." Binding="{Binding mfgApprovedBy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Н.контр." Binding="{Binding rateOfInspection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Утвердил" Binding="{Binding approvedBy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Материал" Binding="{Binding materialName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Масса" Binding="{Binding Mass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Литера" Binding="{Binding revisionLetter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Плотность" Binding="{Binding density, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Примечание" Binding="{Binding note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Раздел спецификации" Binding="{Binding sectionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Позиция в спецификации" Binding="{Binding position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Формат" Binding="{Binding format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Зона" Binding="{Binding zone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Организация" Binding="{Binding organization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Наименование" Binding="{Binding NameValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Разработал" Binding="{Binding StampAuthorValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Проверил" Binding="{Binding CheckedByValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Т.контр." Binding="{Binding MfgApprovedByValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Н.контр." Binding="{Binding RateOfInspectionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Утвердил" Binding="{Binding ApprovedByValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Масса" Binding="{Binding MassValue, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Материал" Binding="{Binding MaterialValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Раздел спецификации" Binding="{Binding SectionNameValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Позиция" Binding="{Binding PositionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Примечание" Binding="{Binding NoteValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Путь к файлу" Binding="{Binding PathModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                 </DataGrid.Columns>
             </DataGrid>
-            
+
             <Label x:Name="LabelProperties" Content="Редактирование свойств моделей:" HorizontalAlignment="Left" Margin="67,50,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia" Width="290" Height="30"/>
 
             <Rectangle x:Name="RectangleLabelProperties" Stroke="DarkRed" Fill="DarkRed" Width="3" Margin="581,90,216,109.6"/>
             <Button x:Name="ButtonLoadKompasModelProp" Style="{DynamicResource ImportButtonStyle}" Content="Загрузить ЗD-модели:" HorizontalAlignment="Left"
-                Margin="67,350,0,0" VerticalAlignment="Top"
-                Width="206" Height="60"
+                Margin="71,349,0,0" VerticalAlignment="Top"
+                Width="210" Height="65"
                 FontSize="20" FontFamily="Constantia" Click="ButtonLoadKompasModelProp_Click"/>
             <Label x:Name="LabelPropertiesVisor" Content="Предпросмотр:" HorizontalAlignment="Left" Margin="589,50,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
+            <Label x:Name="LabelPropertiesAmmountElem" Content="Элементов:" HorizontalAlignment="Left" Margin="414,349,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia" Width="104" Height="30"/>
+            
+            <Button x:Name="RemoveModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Удалить выбранные" HorizontalAlignment="Left"
+            Margin="294,349,0,0" VerticalAlignment="Top"
+            Foreground="White" Width="115" Height="30" FontFamily="Constantia"
+            Click="RemoveModelPropButton_Click"
+            ToolTip="Убрать из списка отмеченные"     
+                        />
+            <Label x:Name="LabelPropertiesAmmountElemValue" Content="9999" HorizontalAlignment="Left" Margin="518,349,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Calibri" Width="58" Height="30" VerticalContentAlignment="Center"/>
+            <Button x:Name="UpdateModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Обновить список" HorizontalAlignment="Left"
+                Margin="294,384,0,0" VerticalAlignment="Top"
+                Foreground="White" Width="115" Height="30" FontFamily="Constantia"
+                Click="UpdateModelPropButton_Click"
+                ToolTip="Обновить таблицу"     
+                        />
         </Grid>
-        <Grid x:Name="progressBarWaiting" Margin="0,0,0,0" OpacityMask="Black">
+
+        <Grid x:Name="progressBarWaiting" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
             <Grid Margin="0,25,0,0">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://siteoforigin:,,,/img/background.png"/>

@@ -44,6 +44,7 @@ namespace STEP_corrector
             {
                 MessageBox.Show($"Не удалось обработать файл {filePath}: {ex.Message}",
                                 "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MainWindow.LogError(ex.Message);
             }
         }
 
@@ -143,6 +144,7 @@ namespace STEP_corrector
             if (startIndex < 4 || endIndex == -1)
             {
                 throw new FormatException("Hex value not found in the input string.");
+                
             }
 
             string hexValue = input.Substring(startIndex, endIndex - startIndex);
@@ -166,9 +168,9 @@ namespace STEP_corrector
                     int charCode = int.Parse(hexChar, NumberStyles.HexNumber);
                     result.Append((char)charCode);
                 }
-                catch (FormatException)
+                catch (FormatException ex)
                 {
-                    throw new FormatException($"Invalid hex code: {hexChar}");
+                    throw new FormatException($"Invalid hex code: {hexChar}");                    
                 }
             }
             return result.ToString();
