@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -22,5 +23,22 @@ namespace STEP_corrector
         public string PositionValue { get; set; } // Позиция
         public string NoteValue { get; set; } // Примечание
         public string PathModel { get; set; } // Путь к файлу
+
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

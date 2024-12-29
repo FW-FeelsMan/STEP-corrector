@@ -30,7 +30,7 @@ namespace STEP_corrector
         public MainWindow()
         {
             InitializeComponent();
-            RemoveDirectory();
+
 
             FilesSTPListBox.ItemsSource = _filesSTP;
             ModelListBox.ItemsSource = _kompasFiles;
@@ -46,6 +46,16 @@ namespace STEP_corrector
             DataGrid.ItemsSource = _modelDataCollection;
 
             editorModelProp = new EditorModelProp(this);
+
+            try
+            {
+                RemoveDirectory();
+            }
+            catch (Exception ex)
+            {
+                LogError(ex.Message);
+            }
+
         }
 
         public void AddModelData(ModelData modelData)
@@ -81,8 +91,6 @@ namespace STEP_corrector
             string tempDirProp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "STEP_corrector_Temp_Prop");
             string tempDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "STEP_corrector_Temp");
 
-            progressBarWaiting.Visibility = Visibility.Visible;
-
             var worker = new BackgroundWorker();
             worker.DoWork += (s, args) =>
             {
@@ -99,15 +107,12 @@ namespace STEP_corrector
                 }
                 catch (Exception ex)
                 {
-                    args.Result = ex;
-                    LogError(ex.Message);
+                    args.Result = ex; 
                 }
             };
 
             worker.RunWorkerCompleted += (s, args) =>
             {
-                progressBarWaiting.Visibility = Visibility.Collapsed;
-
                 if (args.Result is Exception ex)
                 {
                     MessageBox.Show($"Ошибка при удалении папок: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -115,7 +120,7 @@ namespace STEP_corrector
                 }
             };
 
-            worker.RunWorkerAsync();
+            worker.RunWorkerAsync(); 
         }
         private void KMPSbuttonSidebar_Click(object sender, RoutedEventArgs e)
         {
@@ -139,6 +144,7 @@ namespace STEP_corrector
 
         private void ButtonQuit_Click(object sender, RoutedEventArgs e)
         {
+            RemoveDirectory();
             Application.Current.Shutdown();
         }
         private void ButtonCollaps_Click(object sender, RoutedEventArgs e)
@@ -649,77 +655,55 @@ namespace STEP_corrector
             if (openFileDialog.ShowDialog() == true)
             {
                 progressBarWaiting.Visibility = Visibility.Visible;
-
-                foreach (var filePathProp in openFileDialog.FileNames)
+                
+                var filePaths = openFileDialog.FileNames.ToList();
+                
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, args) =>
                 {
-                    editorModelProp.StartEditingModel(filePathProp);
-                }
+                    foreach (var filePath in filePaths)
+                    {
+                        try
+                        {
+                            editorModelProp.StartEditingModel(filePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogError(ex.Message);
+                        }
+                    }
+                };
 
-                progressBarWaiting.Visibility = Visibility.Hidden;
+                worker.RunWorkerCompleted += (s, args) =>
+                {
+                    progressBarWaiting.Visibility = Visibility.Hidden;
+                };
+
+                worker.RunWorkerAsync();
             }
         }
+
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
-        private void DataGridRemove_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete)
-            {
-                //RemoveModelPropButton_Click(sender, e);
-                // Убедитесь, что вы не обновляете DataGrid здесь, если это не требуется
-                // RefreshDataGrid(); // Удалите или закомментируйте эту строку
-            }
-        }
-
-        private void RefreshDataGrid()
-        {
-            DataGrid.ItemsSource = null;
-            //DataGrid.ItemsSource = KompasFilesProp;
-        }
-        private void DataGrid_Drop(object sender, DragEventArgs e)
-        {
-            // Проверяем, есть ли в перетаскиваемых данных файлы
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                // Получаем массив файлов из перетаскиваемых данных
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                foreach (var filePath in files)
-                {
-                    // Проверяем, что файл существует
-                    if (File.Exists(filePath))
-                    {
-                        // Создаем объект ModelData из файла
-                        var modelData = CreateModelDataFromFile(filePath);
-
-                        if (modelData != null)
-                        {
-                            // Добавляем созданный объект в коллекцию и обновляем счетчик
-                            AddModelData(modelData);
-                        }
-                        else
-                        {
-                            MessageBox.Show($"Не удалось создать ModelData для файла: {filePath}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Файл не найден: {filePath}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-        }
-
         private void RemoveModelPropButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItems = DataGrid.SelectedItems.Cast<ModelData>().ToList();
-            foreach (var item in selectedItems)
+            var itemsToRemove = _modelDataCollection.Where(item => item.IsSelected).ToList();
+
+            if (itemsToRemove.Count == 0)
+            {
+                MessageBox.Show("Нет отмеченных элементов для удаления.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            foreach (var item in itemsToRemove)
             {
                 _modelDataCollection.Remove(item);
             }
-            UpdateLabelPropertiesCount(); // Обновление количества элементов
+
+            UpdateLabelPropertiesCount();
         }
 
         private void UpdateModelPropButton_Click(object sender, RoutedEventArgs e)
@@ -730,19 +714,38 @@ namespace STEP_corrector
         {
             LabelPropertiesAmmountElemValue.Content = _modelDataCollection.Count.ToString();
         }
-        private void DataGrid_DragOver(object sender, DragEventArgs e)
+        private void InputFieldValueProp_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (string.IsNullOrWhiteSpace(InputFieldValueProp.Text))
             {
-                e.Effects = DragDropEffects.Copy;
+                LabelHint.Visibility = Visibility.Visible;
             }
             else
             {
-                e.Effects = DragDropEffects.None;
+                LabelHint.Visibility = Visibility.Collapsed;
             }
         }
 
         #endregion 3DmodelProperties
 
+        private void RemoveDataCellPropButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearGridModelPropButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddNewModelPropButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SelectAllModelPropButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

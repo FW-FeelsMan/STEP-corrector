@@ -1,7 +1,6 @@
 ﻿using Ionic.Zip;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -11,7 +10,6 @@ namespace STEP_corrector
 {
     public class EditorModelProp
     {
-        private List<EditorModelProp> _modelProps;
         private MainWindow _mainWindow;
 
         private string _fileExtensionProp;
@@ -22,17 +20,13 @@ namespace STEP_corrector
             set
             {
                 _fileExtensionProp = value;
-                FileType = DetermineFileType(); 
+                FileType = DetermineFileType();
             }
         }
         public string FileType { get; private set; }
         public string Nomination { get; set; }
         public string Designation { get; set; }
 
-        public EditorModelProp()
-        {
-            _modelProps = new List<EditorModelProp>();
-        }
         public EditorModelProp(MainWindow mainWindow)
         {
             _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
@@ -88,24 +82,28 @@ namespace STEP_corrector
 
                     var modelData = new ModelData
                     {
-                        FileNameProp = Path.GetFileName(modelPath), // Имя файла
-                        FileType = fileType, // Тип
-                        Designation = baseValue, // Обозначение
-                        NameValue = nameValue, // Наименование
-                        StampAuthorValue = stampAuthorValue, // Разработал
-                        CheckedByValue = checkedByValue, // Проверил
-                        MfgApprovedByValue = mfgApprovedByValue, // Т.контр.
-                        RateOfInspectionValue = rateOfInspectionValue, // Н.контр.
-                        ApprovedByValue = approvedByValue, // Утвердил
-                        MassValue = massValue, // Масса
-                        MaterialValue = materialValue, // Материал
-                        SectionNameValue = sectionNameValue, // Раздел спецификации
-                        PositionValue = positionValue, // Позиция
-                        NoteValue = noteValue, // Примечание
-                        PathModel = modelPath // Путь к файлу
+                        FileNameProp = Path.GetFileName(modelPath),
+                        FileType = fileType,
+                        Designation = baseValue,
+                        NameValue = nameValue,
+                        StampAuthorValue = stampAuthorValue,
+                        CheckedByValue = checkedByValue,
+                        MfgApprovedByValue = mfgApprovedByValue,
+                        RateOfInspectionValue = rateOfInspectionValue,
+                        ApprovedByValue = approvedByValue,
+                        MassValue = massValue,
+                        MaterialValue = materialValue,
+                        SectionNameValue = sectionNameValue,
+                        PositionValue = positionValue,
+                        NoteValue = noteValue,
+                        PathModel = modelPath
                     };
 
-                    _mainWindow.AddModelData(modelData);
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        _mainWindow.AddModelData(modelData);
+                    }));
+
                 }
                 else
                 {
@@ -131,12 +129,14 @@ namespace STEP_corrector
                 .FirstOrDefault(e => (string)e.Attribute("id") == "name");
             return nameElement?.Attribute("value")?.Value ?? "Не указано";
         }
+
         private string ExtractBaseValue(XDocument xDoc)
         {
-            var nameElement = xDoc.Descendants("property")
+            var baseElement = xDoc.Descendants("property")
                 .FirstOrDefault(e => (string)e.Attribute("id") == "base");
-            return nameElement?.Attribute("value")?.Value ?? "Не указано";
+            return baseElement?.Attribute("value")?.Value ?? "Не указано";
         }
+
         private string ExtractMaterialValue(XDocument xDoc)
         {
             var materialElement = xDoc.Descendants("property")
@@ -146,9 +146,6 @@ namespace STEP_corrector
             {
                 var materialName = materialElement.Descendants("property")
                     .FirstOrDefault(p => (string)p.Attribute("id") == "name")?.Attribute("value")?.Value ?? "Не указано";
-
-               // var materialDensity = materialElement.Descendants("property")
-                   // .FirstOrDefault(p => (string)p.Attribute("id") == "density")?.Attribute("value")?.Value ?? "Не указано";
 
                 return $"{materialName}";
             }

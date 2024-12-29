@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:wpf="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
         mc:Ignorable="d"
 
         Title="STEP-corrector" Height="450" Width="800" AllowsTransparency="True"  Icon="pack://siteoforigin:,,,/img/faviconV2.png"
@@ -145,7 +146,7 @@
                            FontSize="6"
                            TextWrapping="Wrap" />
         <Label x:Name="ModelLabl" Content="Models" Margin="4,142,754,282.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
-        <Label x:Name="LableSTP" Content="Corector" Margin="2,81,752,343.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="46"/>
+        <Label x:Name="LableSTP" Content="Corrector" Margin="0,81,749,343.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51"/>
 
 
         <Grid x:Name="STEPgrid" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
@@ -274,7 +275,7 @@
         <Grid x:Name="STEPprop" Margin="0,0,0,0" OpacityMask="Black">
             <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,172,0,0" VerticalAlignment="Top" Width="2"/>
 
-            <DataGrid x:Name="DataGrid" HorizontalAlignment="Left" Height="250" Margin="70,90,0,0" 
+            <DataGrid x:Name="DataGrid" HorizontalAlignment="Left" Height="250" Margin="69,70,0,0" 
                   VerticalAlignment="Top" Width="500" FontSize="14"
                   ScrollViewer.HorizontalScrollBarVisibility="Visible" 
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -284,12 +285,9 @@
                   AutoGenerateColumns="False" 
                   SelectionChanged="DataGrid_SelectionChanged_1" 
                   HorizontalGridLinesBrush="#FF688CAF" 
-                  VerticalGridLinesBrush="#FF688CAF"
-                  AllowDrop="True" 
-                  DragOver="DataGrid_DragOver" 
-                  SelectionMode="Extended"
-                  KeyDown="DataGridRemove_KeyDown"
-                  Drop="DataGrid_Drop">
+                  VerticalGridLinesBrush="#FF688CAF"    
+                  SelectionUnit="Cell"    
+                  SelectionMode="Extended">
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
@@ -298,6 +296,7 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="№" Binding="{Binding IsSelected, Mode=TwoWay}" Width="Auto" />
                     <DataGridTextColumn Header="Имя файла" Binding="{Binding FileNameProp, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                     <DataGridTextColumn Header="Тип файла" Binding="{Binding FileType, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                     <DataGridTextColumn Header="Обозначение" Binding="{Binding Designation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
@@ -316,29 +315,56 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Label x:Name="LabelProperties" Content="Редактирование свойств моделей:" HorizontalAlignment="Left" Margin="67,50,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia" Width="290" Height="30"/>
+            <Label x:Name="LabelProperties" Content="Редактирование свойств моделей:" HorizontalAlignment="Left" Margin="66,30,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia" Width="290" Height="30"/>
 
-            <Rectangle x:Name="RectangleLabelProperties" Stroke="DarkRed" Fill="DarkRed" Width="3" Margin="581,90,216,109.6"/>
+            <Rectangle x:Name="RectangleLabelProperties" Stroke="DarkRed" Fill="DarkRed" Width="3" Margin="580,70,217,129.6"/>
             <Button x:Name="ButtonLoadKompasModelProp" Style="{DynamicResource ImportButtonStyle}" Content="Загрузить ЗD-модели:" HorizontalAlignment="Left"
-                Margin="71,349,0,0" VerticalAlignment="Top"
-                Width="210" Height="65"
+                Margin="70,329,0,0" VerticalAlignment="Top"
+                Width="243" Height="65"
                 FontSize="20" FontFamily="Constantia" Click="ButtonLoadKompasModelProp_Click"/>
-            <Label x:Name="LabelPropertiesVisor" Content="Предпросмотр:" HorizontalAlignment="Left" Margin="589,50,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
-            <Label x:Name="LabelPropertiesAmmountElem" Content="Элементов:" HorizontalAlignment="Left" Margin="414,349,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia" Width="104" Height="30"/>
-            
+            <Label x:Name="LabelPropertiesVisor" Content="Предпросмотр:" HorizontalAlignment="Left" Margin="588,30,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
+            <Label x:Name="LabelPropertiesAmmountElem" Content="Элементов:" HorizontalAlignment="Left" Margin="421,30,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia" Width="104" Height="30"/>
+
             <Button x:Name="RemoveModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Удалить выбранные" HorizontalAlignment="Left"
-            Margin="294,349,0,0" VerticalAlignment="Top"
+            Margin="326,329,0,0" VerticalAlignment="Top"
             Foreground="White" Width="115" Height="30" FontFamily="Constantia"
             Click="RemoveModelPropButton_Click"
             ToolTip="Убрать из списка отмеченные"     
                         />
-            <Label x:Name="LabelPropertiesAmmountElemValue" Content="9999" HorizontalAlignment="Left" Margin="518,349,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Calibri" Width="58" Height="30" VerticalContentAlignment="Center"/>
+            <Label x:Name="LabelPropertiesAmmountElemValue" Content="9999" HorizontalAlignment="Left" Margin="525,30,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Calibri" Width="58" Height="30" VerticalContentAlignment="Center"/>
             <Button x:Name="UpdateModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Обновить список" HorizontalAlignment="Left"
-                Margin="294,384,0,0" VerticalAlignment="Top"
+                Margin="326,364,0,0" VerticalAlignment="Top"
                 Foreground="White" Width="115" Height="30" FontFamily="Constantia"
                 Click="UpdateModelPropButton_Click"
                 ToolTip="Обновить таблицу"     
                         />
+            <Button x:Name="RemoveDataCellPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Очистить ячейку" HorizontalAlignment="Left"
+                Margin="454,329,0,0" VerticalAlignment="Top"
+                Foreground="White" Width="115" Height="30" FontFamily="Constantia"
+                Click="RemoveDataCellPropButton_Click"
+                ToolTip="Убрать данные из выбранных ячеек"     
+                        />
+            <Button x:Name="ClearGridModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Очистить таблицу" HorizontalAlignment="Left"
+                Margin="454,364,0,0" VerticalAlignment="Top"
+                Foreground="White" Width="115" Height="30" FontFamily="Constantia"
+                Click="ClearGridModelPropButton_Click"
+                ToolTip="Очистить таблицу"/>
+            <Label x:Name="LabelHint" Content="Введите новое значение" HorizontalAlignment="Left" 
+            Margin="70,399,0,0" VerticalAlignment="Top" Height="30" VerticalContentAlignment="Center" 
+            FontSize="11" Foreground="#7F000000" Width="209"/>
+
+            <TextBox x:Name="InputFieldValueProp" HorizontalAlignment="Left" Height="30" Margin="70,399,0,0" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="243" VerticalContentAlignment="Center" 
+            FontSize="16" Background="#19FFFFFF" ToolTip="Введите новое значение свойства модели" 
+            TextChanged="InputFieldValueProp_TextChanged"/>
+
+            <Button x:Name="AddNewModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Добавить значение" HorizontalAlignment="Left"
+                Margin="326,399,0,0" VerticalAlignment="Top"
+                Foreground="White" Width="115" Height="30" FontFamily="Constantia"
+                Click="AddNewModelPropButton_Click"
+                ToolTip="Внести новое значение в свойство модели"     
+                        />
+
         </Grid>
 
         <Grid x:Name="progressBarWaiting" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
