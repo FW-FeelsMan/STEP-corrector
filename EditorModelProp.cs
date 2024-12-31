@@ -91,7 +91,7 @@ namespace STEP_corrector
                         MfgApprovedByValue = mfgApprovedByValue,
                         RateOfInspectionValue = rateOfInspectionValue,
                         ApprovedByValue = approvedByValue,
-                        MassValue = massValue,
+                        //MassValue = massValue,
                         MaterialValue = materialValue,
                         SectionNameValue = sectionNameValue,
                         PositionValue = positionValue,

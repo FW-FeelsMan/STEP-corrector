@@ -17,6 +17,27 @@
           "build/Microsoft.NETFramework.ReferenceAssemblies.net40.targets": {}
         }
       },
+      "WindowsAPICodePack-Core/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/Microsoft.WindowsAPICodePack.dll": {}
+        },
+        "runtime": {
+          "lib/Microsoft.WindowsAPICodePack.dll": {}
+        }
+      },
+      "WindowsAPICodePack-Shell/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "WindowsAPICodePack-Core": "1.1.0"
+        },
+        "compile": {
+          "lib/Microsoft.WindowsAPICodePack.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/Microsoft.WindowsAPICodePack.Shell.dll": {}
+        }
+      },
       "WpfAnimatedGif/2.0.2": {
         "type": "package",
         "compile": {
@@ -456,6 +477,32 @@
         "microsoft.netframework.referenceassemblies.net40.nuspec"
       ]
     },
+    "WindowsAPICodePack-Core/1.1.0": {
+      "sha512": "8EAuP5Vstfsj/sj+JnUoO7r9qCl4TDhGBjk750xiDfR0b2WzsWN9vuR3ezkVX9sj/HQDgs5L/YV9S7jVOVSd4Q==",
+      "type": "package",
+      "path": "windowsapicodepack-core/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/Microsoft.WindowsAPICodePack.dll",
+        "lib/Microsoft.WindowsAPICodePack.pdb",
+        "windowsapicodepack-core.1.1.0.nupkg.sha512",
+        "windowsapicodepack-core.nuspec"
+      ]
+    },
+    "WindowsAPICodePack-Shell/1.1.0": {
+      "sha512": "23D2xT+nEAypnqC9RHW3DBfl+WmC0EnwCrGE47cwX/2iFb4PznZf2jaF2Zvp6E94L/llMmgHUw+pQRgdSDZw5w==",
+      "type": "package",
+      "path": "windowsapicodepack-shell/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/Microsoft.WindowsAPICodePack.Shell.dll",
+        "lib/Microsoft.WindowsAPICodePack.Shell.pdb",
+        "windowsapicodepack-shell.1.1.0.nupkg.sha512",
+        "windowsapicodepack-shell.nuspec"
+      ]
+    },
     "WpfAnimatedGif/2.0.2": {
       "sha512": "B0j9SqtThyHVTiOPvu6yR+39Te0g3o+7Jjb+qEm7+Iz1HRqbE5/4QV+ntHWOYYBPOUFr9x1mdzGl/EzWP+nKiA==",
       "type": "package",
@@ -481,6 +528,7 @@
     ".NETFramework,Version=v4.0": [
       "DotNetZip >= 1.16.0",
       "Microsoft.NETFramework.ReferenceAssemblies.net40 >= 1.0.3",
+      "WindowsAPICodePack-Shell >= 1.1.0",
       "WpfAnimatedGif >= 2.0.2"
     ]
   },
@@ -523,6 +571,10 @@
           "Microsoft.NETFramework.ReferenceAssemblies.net40": {
             "target": "Package",
             "version": "[1.0.3, )"
+          },
+          "WindowsAPICodePack-Shell": {
+            "target": "Package",
+            "version": "[1.1.0, )"
           },
           "WpfAnimatedGif": {
             "target": "Package",

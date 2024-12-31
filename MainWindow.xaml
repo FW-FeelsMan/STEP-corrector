@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        xmlns:wpf="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
         mc:Ignorable="d"
 
         Title="STEP-corrector" Height="450" Width="800" AllowsTransparency="True"  Icon="pack://siteoforigin:,,,/img/faviconV2.png"
@@ -210,6 +209,7 @@
                     />
             <Label Content="Выберите STEP-файлы:" HorizontalAlignment="Left" Margin="113,80,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
             <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,51,0,0" VerticalAlignment="Top" Width="2"/>
+            <Label Content="Этап 1: подготовка .stp-файла" HorizontalAlignment="Left" Margin="59,25,0,0" VerticalAlignment="Top" FontSize="22" FontFamily="Constantia"/>
 
         </Grid>
         <Grid x:Name="STEPkompas" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
@@ -269,6 +269,7 @@
                     />
             <Label Content="Выберите ЗD-модели:" HorizontalAlignment="Left" Margin="126,80,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
             <Rectangle x:Name="flagSidebar" Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,113,0,0" VerticalAlignment="Top" Width="2"/>
+            <Label Content="Этап 2: удаление дублирующихся обозначений" HorizontalAlignment="Left" Margin="59,25,0,0" VerticalAlignment="Top" FontSize="20" FontFamily="Constantia"/>
 
         </Grid>
 
@@ -276,18 +277,20 @@
             <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,172,0,0" VerticalAlignment="Top" Width="2"/>
 
             <DataGrid x:Name="DataGrid" HorizontalAlignment="Left" Height="250" Margin="69,70,0,0" 
-                  VerticalAlignment="Top" Width="500" FontSize="14"
-                  ScrollViewer.HorizontalScrollBarVisibility="Visible" 
-                  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  CanUserResizeColumns="true" 
-                  HeadersVisibility="Column" 
-                  Background="#CCF0F0F0" 
-                  AutoGenerateColumns="False" 
-                  SelectionChanged="DataGrid_SelectionChanged_1" 
-                  HorizontalGridLinesBrush="#FF688CAF" 
-                  VerticalGridLinesBrush="#FF688CAF"    
-                  SelectionUnit="Cell"    
-                  SelectionMode="Extended">
+          VerticalAlignment="Top" Width="500" FontSize="14"
+          ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+          ScrollViewer.VerticalScrollBarVisibility="Visible"
+          CanUserResizeColumns="true" 
+          HeadersVisibility="Column" 
+          AutoGenerateColumns="False" 
+          HorizontalGridLinesBrush="#FF688CAF" 
+          VerticalGridLinesBrush="#FF688CAF"
+          SelectionUnit="Cell"
+          SelectionMode="Extended"
+          MouseLeftButtonDown ="DataGrid_MouseLeftButtonDown">
+                <DataGrid.Background>
+                    <ImageBrush/>
+                </DataGrid.Background>
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
@@ -295,9 +298,22 @@
                     </Style>
                 </DataGrid.CellStyle>
 
+
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="№" Binding="{Binding IsSelected, Mode=TwoWay}" Width="Auto" />
-                    <DataGridTextColumn Header="Имя файла" Binding="{Binding FileNameProp, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
+
+                    <DataGridTemplateColumn Header="№" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+
+                    <DataGridTextColumn Header="Имя файла" 
+                            Binding="{Binding FileNameProp, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" 
+                            IsReadOnly="True" 
+                            Width="Auto" />
                     <DataGridTextColumn Header="Тип файла" Binding="{Binding FileType, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                     <DataGridTextColumn Header="Обозначение" Binding="{Binding Designation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                     <DataGridTextColumn Header="Наименование" Binding="{Binding NameValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
@@ -306,12 +322,12 @@
                     <DataGridTextColumn Header="Т.контр." Binding="{Binding MfgApprovedByValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                     <DataGridTextColumn Header="Н.контр." Binding="{Binding RateOfInspectionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                     <DataGridTextColumn Header="Утвердил" Binding="{Binding ApprovedByValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Масса" Binding="{Binding MassValue, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Материал" Binding="{Binding MaterialValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Раздел спецификации" Binding="{Binding SectionNameValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+
+                    <DataGridTextColumn Header="Материал" Binding="{Binding MaterialValue, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                    <DataGridTextColumn Header="Раздел спецификации" Binding="{Binding SectionNameValue, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                     <DataGridTextColumn Header="Позиция" Binding="{Binding PositionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
                     <DataGridTextColumn Header="Примечание" Binding="{Binding NoteValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
-                    <DataGridTextColumn Header="Путь к файлу" Binding="{Binding PathModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
+                    <DataGridTextColumn Header="Путь к файлу" Binding="{Binding PathModel, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -329,13 +345,13 @@
             Margin="326,329,0,0" VerticalAlignment="Top"
             Foreground="White" Width="115" Height="30" FontFamily="Constantia"
             Click="RemoveModelPropButton_Click"
-            ToolTip="Убрать из списка отмеченные"     
+            ToolTip="Убрать из списка отмеченные строки"     
                         />
             <Label x:Name="LabelPropertiesAmmountElemValue" Content="9999" HorizontalAlignment="Left" Margin="525,30,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Calibri" Width="58" Height="30" VerticalContentAlignment="Center"/>
-            <Button x:Name="UpdateModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Обновить список" HorizontalAlignment="Left"
+            <Button x:Name="GetAllModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Выбрать все" HorizontalAlignment="Left"
                 Margin="326,364,0,0" VerticalAlignment="Top"
                 Foreground="White" Width="115" Height="30" FontFamily="Constantia"
-                Click="UpdateModelPropButton_Click"
+                Click="GetAllModelPropButton_Click"
                 ToolTip="Обновить таблицу"     
                         />
             <Button x:Name="RemoveDataCellPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Очистить ячейку" HorizontalAlignment="Left"
@@ -364,6 +380,12 @@
                 Click="AddNewModelPropButton_Click"
                 ToolTip="Внести новое значение в свойство модели"     
                         />
+            <Image x:Name="PreviewImage" Height="203" Margin="0,0,9,149.6" VerticalAlignment="Bottom" Width="203"  HorizontalAlignment="Right"/>
+            <Button x:Name="ApplyNewModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Применить" HorizontalAlignment="Left"
+                Margin="454,399,0,0" VerticalAlignment="Top"
+                Foreground="White" Width="115" Height="30" FontFamily="Constantia"
+                Click="ApplyNewModelPropButton_Click"                
+                ToolTip="Применить новые значения свойств"/>
 
         </Grid>
 

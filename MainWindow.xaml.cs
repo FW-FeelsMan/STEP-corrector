@@ -1,18 +1,29 @@
-﻿using Microsoft.Win32;
+﻿using Ionic.Zip;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Xml.Linq;
+using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
+
+using Application = System.Windows.Application;
+using System.Windows.Media;
 
 namespace STEP_corrector
 {
+
     public partial class MainWindow : Window
-    {
+    {       
+
         private ObservableCollection<StepFile> _filesSTP = new ObservableCollection<StepFile>();
         private ObservableCollection<KompasModel> _kompasFiles = new ObservableCollection<KompasModel>();
 
@@ -26,11 +37,11 @@ namespace STEP_corrector
         private EditorModelProp editorModelProp;
 
 
+
         #region header
         public MainWindow()
         {
             InitializeComponent();
-
 
             FilesSTPListBox.ItemsSource = _filesSTP;
             ModelListBox.ItemsSource = _kompasFiles;
@@ -44,6 +55,7 @@ namespace STEP_corrector
             CheckAndCreateErrorLog();
 
             DataGrid.ItemsSource = _modelDataCollection;
+            DataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
             editorModelProp = new EditorModelProp(this);
 
@@ -55,6 +67,8 @@ namespace STEP_corrector
             {
                 LogError(ex.Message);
             }
+
+            
 
         }
 
@@ -145,7 +159,7 @@ namespace STEP_corrector
         private void ButtonQuit_Click(object sender, RoutedEventArgs e)
         {
             RemoveDirectory();
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
         private void ButtonCollaps_Click(object sender, RoutedEventArgs e)
         {
@@ -303,13 +317,18 @@ namespace STEP_corrector
             try
             {
                 string backupPath = $"{filePath}.bak";
-                File.Copy(filePath, backupPath, overwrite: true);
+
+                if (File.Exists(filePath))
+                {
+                    File.Copy(filePath, backupPath, overwrite: true);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при создании резервной копии для файла {filePath}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void FilesSTPListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -445,7 +464,6 @@ namespace STEP_corrector
                         var model = checkedModels[i];
                         CreateBackup(model.FilePath);
 
-                        // Обновление UI может быть здесь, если необходимо
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
                             // Можно обновить прогресс, если нужно
@@ -683,11 +701,6 @@ namespace STEP_corrector
             }
         }
 
-        private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void RemoveModelPropButton_Click(object sender, RoutedEventArgs e)
         {
             var itemsToRemove = _modelDataCollection.Where(item => item.IsSelected).ToList();
@@ -726,26 +739,418 @@ namespace STEP_corrector
             }
         }
 
-        #endregion 3DmodelProperties
+        
 
         private void RemoveDataCellPropButton_Click(object sender, RoutedEventArgs e)
         {
+            var selectedCells = DataGrid.SelectedCells;
 
+            if (selectedCells.Count == 0)
+            {
+                MessageBox.Show("Нет отмеченных ячеек для удаления.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            foreach (var cell in selectedCells)
+            {
+                var item = cell.Item as ModelData;
+
+                if (item != null)
+                {
+                    var boundColumn = cell.Column as DataGridBoundColumn;
+                    if (boundColumn != null)
+                    {
+                        var binding = boundColumn.Binding as Binding;
+                        if (binding != null)
+                        {
+                            if (binding.Mode == BindingMode.OneTime)
+                            {
+                                continue;
+                            }
+
+                            var propertyName = binding.Path.Path; 
+                            
+                            var propertyInfo = typeof(ModelData).GetProperty(propertyName);
+                            if (propertyInfo != null && propertyInfo.CanWrite)
+                            {
+                                propertyInfo.SetValue(item, null, null); 
+                            }
+                        }
+                    }
+                }
+            }
+
+            DataGrid.Items.Refresh();
+            UpdateLabelPropertiesCount();
         }
-
         private void ClearGridModelPropButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_modelDataCollection.Count == 0)
+            {
+                MessageBox.Show("Таблица уже пуста.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
+            var result = MessageBox.Show("Вы уверены, что хотите очистить таблицу?", "Очистка таблицы", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _modelDataCollection.Clear(); 
+                UpdateLabelPropertiesCount(); 
+                RemoveDirectory();
+            }
         }
+
 
         private void AddNewModelPropButton_Click(object sender, RoutedEventArgs e)
         {
+            var selectedCells = DataGrid.SelectedCells;
 
+            if (selectedCells.Count == 0)
+            {
+                MessageBox.Show("Нет отмеченных ячеек для изменения.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var newValue = InputFieldValueProp.Text;
+
+            foreach (var cell in selectedCells)
+            {
+                var item = cell.Item as ModelData;
+
+                if (item != null)
+                {
+                    var boundColumn = cell.Column as DataGridBoundColumn;
+                    if (boundColumn != null)
+                    {
+                        var binding = boundColumn.Binding as Binding;
+                        if (binding != null)
+                        {
+                            if (binding.Mode == BindingMode.OneTime)
+                            {
+                                continue;
+                            }
+
+                            var propertyName = binding.Path.Path; 
+
+                            var propertyInfo = typeof(ModelData).GetProperty(propertyName);
+                            if (propertyInfo != null && propertyInfo.CanWrite)
+                            {
+                                var convertedValue = Convert.ChangeType(newValue, propertyInfo.PropertyType);
+                                propertyInfo.SetValue(item, convertedValue, null); 
+                            }
+                        }
+                    }
+                }
+            }
+
+            DataGrid.Items.Refresh();
+            UpdateLabelPropertiesCount();
         }
 
-        private void SelectAllModelPropButton_Click(object sender, RoutedEventArgs e)
+        private void ApplyNewModelPropButton_Click(object sender, RoutedEventArgs e)
         {
+            var updatedModels = _modelDataCollection.Where(m => m.IsSelected).ToList();
+            if (updatedModels.Count == 0)
+            {
+                MessageBox.Show("Нет выбранных моделей для обновления.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
+            MessageBoxResult result = MessageBox.Show("Хотите ли вы создать резервную копию файла перед применением изменений?",
+                                                      "Создание резервной копии",
+                                                      MessageBoxButton.YesNo,
+                                                      MessageBoxImage.Question);
+
+            bool createBackup = result == MessageBoxResult.Yes;
+
+            foreach (var model in updatedModels)
+            {
+                try
+                {
+                    string tempDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "STEP_corrector_Temp_Prop");
+                    string extractedDir = Path.Combine(tempDir, Path.GetFileNameWithoutExtension(model.PathModel));
+
+                    // Путь к файлу MetaProductInfo
+                    string metaFilePath = Path.Combine(extractedDir, "MetaProductInfo");
+
+                    if (createBackup)
+                    {
+                        CreateBackup(model.PathModel); // Резервная копия создается по исходному пути
+                    }
+
+                    if (File.Exists(metaFilePath))
+                    {
+                        var xDoc = XDocument.Load(metaFilePath);
+                        UpdateMetaProductInfo(xDoc, model);
+                        SaveXmlWithEncoding(metaFilePath, xDoc, Encoding.BigEndianUnicode);
+                    }
+
+                    string newArchivePath = Path.ChangeExtension(model.PathModel, Path.GetExtension(model.PathModel));
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        zip.CompressionLevel = Ionic.Zlib.CompressionLevel.None;
+                        zip.AddDirectory(extractedDir);
+                        zip.Save(newArchivePath);
+                    }
+
+                    Directory.Delete(extractedDir, true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при обновлении модели {model.FileNameProp}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            MessageBox.Show("Изменения успешно применены!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        private void SaveXmlWithEncoding(string filePath, XDocument xDoc, Encoding encoding)
+        {
+            using (var writer = new StreamWriter(filePath, false, encoding))
+            {
+                xDoc.Save(writer);
+            }
+        }
+        private void UpdateMetaProductInfo(XDocument xDoc, ModelData model)
+        {
+            var infObjects = xDoc.Descendants("infObject").ToList();
+
+            foreach (var infObject in infObjects)
+            {
+                var designationElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "base");
+                if (designationElement != null && !string.IsNullOrEmpty(model.Designation) && model.Designation != "Не указано")
+                {
+                    designationElement.SetAttributeValue("value", model.Designation);
+                }
+                var nameElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "name");
+                if (nameElement != null && !string.IsNullOrEmpty(model.NameValue) && model.NameValue != "Не указано")
+                {
+                    nameElement.SetAttributeValue("value", model.NameValue);
+                }
+
+                // Обновляем "Разработал"
+                var stampAuthorElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "stampAuthor");
+                if (stampAuthorElement != null && !string.IsNullOrEmpty(model.StampAuthorValue) && model.StampAuthorValue != "Не указано")
+                {
+                    stampAuthorElement.SetAttributeValue("value", model.StampAuthorValue);
+                }
+
+                // Обновляем "Проверил"
+                var checkedByElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "checkedBy");
+                if (checkedByElement != null && !string.IsNullOrEmpty(model.CheckedByValue) && model.CheckedByValue != "Не указано")
+                {
+                    checkedByElement.SetAttributeValue("value", model.CheckedByValue);
+                }
+
+                // Обновляем "Т.контр."
+                var mfgApprovedByElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "mfgApprovedBy");
+                if (mfgApprovedByElement != null && !string.IsNullOrEmpty(model.MfgApprovedByValue) && model.MfgApprovedByValue != "Не указано")
+                {
+                    mfgApprovedByElement.SetAttributeValue("value", model.MfgApprovedByValue);
+                }
+
+                // Обновляем "Н.контр."
+                var rateOfInspectionElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "rateOfInspection");
+                if (rateOfInspectionElement != null && !string.IsNullOrEmpty(model.RateOfInspectionValue) && model.RateOfInspectionValue != "Не указано")
+                {
+                    rateOfInspectionElement.SetAttributeValue("value", model.RateOfInspectionValue);
+                }
+
+                // Обновляем "Утвердил"
+                var approvedByElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "approvedBy");
+                if (approvedByElement != null && !string.IsNullOrEmpty(model.ApprovedByValue) && model.ApprovedByValue != "Не указано")
+                {
+                    approvedByElement.SetAttributeValue("value", model.ApprovedByValue);
+                }
+
+                // Обновляем материал (специальная обработка для вложенных элементов)
+                var materialElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "material");
+                if (materialElement != null)
+                {
+                    var materialNameElement = materialElement.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "name");
+                    if (materialNameElement != null && !string.IsNullOrEmpty(model.MaterialValue) && model.MaterialValue != "Не указано")
+                    {
+                        materialNameElement.SetAttributeValue("value", model.MaterialValue);
+                    }
+                }
+
+                // Обновляем раздел спецификации
+                var sectionNameElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "SPCSection");
+                if (sectionNameElement != null && !string.IsNullOrEmpty(model.SectionNameValue) && model.SectionNameValue != "Не указано")
+                {
+                    sectionNameElement.SetAttributeValue("value", model.SectionNameValue);
+                }
+
+                // Обновляем позицию
+                var positionElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "position");
+                if (positionElement != null && !string.IsNullOrEmpty(model.PositionValue) && model.PositionValue != "Не указано")
+                {
+                    positionElement.SetAttributeValue("value", model.PositionValue);
+                }
+
+                // Обновляем примечание
+                var noteElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == "note");
+                if (noteElement != null && !string.IsNullOrEmpty(model.NoteValue) && model.NoteValue != "Не указано")
+                {
+                    noteElement.SetAttributeValue("value", model.NoteValue);
+                }
+
+                // Если какие-то из этих свойств не были найдены, добавляем их в нужное место
+                AddElementIfNotExists(infObject, "stampAuthor", model.StampAuthorValue);
+                AddElementIfNotExists(infObject, "checkedBy", model.CheckedByValue);
+                AddElementIfNotExists(infObject, "mfgApprovedBy", model.MfgApprovedByValue);
+                AddElementIfNotExists(infObject, "rateOfInspection", model.RateOfInspectionValue);
+                AddElementIfNotExists(infObject, "approvedBy", model.ApprovedByValue);
+                AddElementIfNotExists(infObject, "material", model.MaterialValue);
+                AddElementIfNotExists(infObject, "SPCSection", model.SectionNameValue);
+                AddElementIfNotExists(infObject, "position", model.PositionValue);
+                AddElementIfNotExists(infObject, "note", model.NoteValue);
+            }
+        }
+
+        private void AddElementIfNotExists(XElement infObject, string id, string value)
+        {
+            var existingElement = infObject.Descendants("property").FirstOrDefault(e => (string)e.Attribute("id") == id);
+
+            if (existingElement == null && !string.IsNullOrEmpty(value) && value != "Не указано")
+            {
+                var newElement = new XElement("property",
+                                              new XAttribute("id", id),
+                                              new XAttribute("value", value));
+                infObject.Add(newElement); 
+            }
+        }
+
+        private void GetAllModelPropButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var model in _modelDataCollection)
+            {
+                model.IsSelected = true;
+            }
+
+            DataGrid.Items.Refresh();
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+        private void DataGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var hit = e.OriginalSource as DependencyObject;
+            while (hit != null && !(hit is DataGridCell))
+            {
+                hit = VisualTreeHelper.GetParent(hit);
+            }
+
+            if (hit is DataGridCell cell)
+            {
+                if (cell.Column is DataGridTextColumn textColumn && textColumn.Header.ToString() == "Имя файла")
+                {
+                    var row = DataGrid.ItemContainerGenerator.ContainerFromItem(cell.DataContext) as DataGridRow;
+                    if (row != null)
+                    {
+                        var selectedItem = row.Item as ModelData;
+
+                        if (selectedItem != null)
+                        {
+                            string filePath = selectedItem.PathModel; 
+                            ShowPreview(filePath);
+                        }
+                    }
+                }
+            }
+        }
+        private void ShowPreview(string filePath)
+        {
+            try
+            {
+                var thumbnail = GetLargeThumbnail(filePath);
+                if (thumbnail != null)
+                {
+                    PreviewImage.Source = thumbnail;
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось получить превью для данного файла.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+            }
+        }
+
+        private BitmapSource GetLargeThumbnail(string filePath)
+        {
+            IntPtr hBitmap = IntPtr.Zero;
+            try
+            {
+                var shellItem = SHCreateItemFromParsingName(filePath, IntPtr.Zero, typeof(IShellItemImageFactory).GUID, out var factory);
+                if (shellItem == 0 && factory != null)
+                {
+                    var size = new SIZE { cx = 1024, cy = 1024 };
+                    var options = SIIGBF.SIIGBF_BIGGERSIZEOK;
+                    factory.GetImage(size, (int)options, out hBitmap);
+
+                    if (hBitmap != IntPtr.Zero)
+                    {
+                        var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                            hBitmap,
+                            IntPtr.Zero,
+                            Int32Rect.Empty,
+                            BitmapSizeOptions.FromEmptyOptions());
+
+                        return bitmapSource;
+                    }
+                }
+            }
+            finally
+            {
+                if (hBitmap != IntPtr.Zero)
+                {
+                    DeleteObject(hBitmap);
+                }
+            }
+            return null;
+        }
+
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int SHCreateItemFromParsingName(
+            [MarshalAs(UnmanagedType.LPWStr)] string pszPath,
+            IntPtr pbc,
+            [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
+            [MarshalAs(UnmanagedType.Interface)] out IShellItemImageFactory ppv);
+
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr hObject);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct SIZE
+        {
+            public int cx;
+            public int cy;
+        }
+
+        [ComImport]
+        [Guid("bcc18b79-ba16-442f-80c4-8a59c30c463b")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        private interface IShellItemImageFactory
+        {
+            [PreserveSig]
+            int GetImage(SIZE size, int flags, out IntPtr phbm);
+        }
+
+        private enum SIIGBF
+        {
+            SIIGBF_RESIZETOFIT = 0x00,
+            SIIGBF_BIGGERSIZEOK = 0x01,
+            SIIGBF_MEMORYONLY = 0x02,
+            SIIGBF_ICONONLY = 0x04,
+            SIIGBF_THUMBNAILONLY = 0x08,
+            SIIGBF_INCACHEONLY = 0x10
+        }
+        #endregion 3DmodelProperties
     }
 }
