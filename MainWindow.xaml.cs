@@ -49,6 +49,7 @@ namespace STEP_corrector
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
+            stpView.Visibility = Visibility.Hidden;
             progressBarWaiting.Visibility = Visibility.Hidden;
 
             LabelPropertiesAmmountElemValue.Content = "0";
@@ -141,6 +142,14 @@ namespace STEP_corrector
             STEPgrid.Visibility = Visibility.Hidden;
             STEPkompas.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
+            stpView.Visibility = Visibility.Hidden;
+        }
+        private void STPbuttonViewSidebar_Click(object sender, RoutedEventArgs e)
+        {
+            STEPkompas.Visibility = Visibility.Hidden;
+            STEPgrid.Visibility = Visibility.Hidden;
+            STEPprop.Visibility = Visibility.Hidden;
+            stpView.Visibility = Visibility.Visible;
         }
 
         private void STPbuttonSidebar_Click(object sender, RoutedEventArgs e)
@@ -148,12 +157,14 @@ namespace STEP_corrector
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
+            stpView.Visibility = Visibility.Hidden;
         }
         private void KMPSbuttonSidebarProps_Click(object sender, RoutedEventArgs e)
         {
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Hidden;
             STEPprop.Visibility = Visibility.Visible;
+            stpView.Visibility = Visibility.Hidden;
         }
 
         private void ButtonQuit_Click(object sender, RoutedEventArgs e)
@@ -278,6 +289,15 @@ namespace STEP_corrector
                 return;
             }
 
+            foreach (var file in checkedFiles)
+            {
+                if (FileChecker.IsFileLocked(file.FilePath))
+                {
+                    MessageBox.Show($"Файл {file.FileName}{file.FileExtension} занят другой программой или недоступен для записи.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; // Прерываем выполнение, если файл занят
+                }
+            }
+
             var result = MessageBox.Show("Сделать резервные копии перед обработкой?", "Резервные копии", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
@@ -367,6 +387,15 @@ namespace STEP_corrector
             {
                 foreach (var file in checkedFiles)
                 {
+                    if (FileChecker.IsFileLocked(file.FilePath))
+                    {
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            MessageBox.Show($"Файл {file.FileName}{file.FileExtension} занят другой программой или недоступен для записи.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }));
+                        continue; // Пропускаем файл, если он занят
+                    }
+
                     try
                     {
                         editor.StartEditing(file.FilePath);
@@ -423,6 +452,12 @@ namespace STEP_corrector
                     }
                     else
                     {
+                        if (FileChecker.IsFileLocked(filePath))
+                        {
+                            MessageBox.Show($"Файл {fileName}{fileExtension} занят другой программой или недоступен для записи.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            continue; // Пропускаем добавление, если файл занят
+                        }
+
                         _filesSTP.Add(new StepFile
                         {
                             FileName = fileName,
@@ -448,6 +483,15 @@ namespace STEP_corrector
             {
                 MessageBox.Show("Нет отмеченных моделей для редактирования.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            }
+
+            foreach (var model in checkedModels)
+            {
+                if (FileChecker.IsFileLocked(model.FilePath))
+                {
+                    MessageBox.Show($"Файл {model.FileName}{model.FileExtension} занят другой программой или недоступен для записи.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; // Прерываем выполнение, если файл занят
+                }
             }
 
             var result = MessageBox.Show("Сделать резервные копии перед обработкой?", "Резервные копии", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -569,6 +613,12 @@ namespace STEP_corrector
                     }
                     else
                     {
+                        if (FileChecker.IsFileLocked(filePath))
+                        {
+                            MessageBox.Show($"Файл {fileName}{fileExtension} занят другой программой или недоступен для записи.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            continue; // Пропускаем добавление, если файл занят
+                        }
+
                         _kompasFiles.Add(new KompasModel
                         {
                             FileName = fileName,
@@ -673,31 +723,39 @@ namespace STEP_corrector
             if (openFileDialog.ShowDialog() == true)
             {
                 progressBarWaiting.Visibility = Visibility.Visible;
-                
+
                 var filePaths = openFileDialog.FileNames.ToList();
-                
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, args) =>
+
+                foreach (var filePath in filePaths)
                 {
-                    foreach (var filePath in filePaths)
+                    var fileName = Path.GetFileNameWithoutExtension(filePath);
+                    var fileExtension = Path.GetExtension(filePath);
+
+                    if (_kompasFiles.Any(f => f.FileName == fileName && f.FileExtension == fileExtension))
+                    {
+                        MessageBox.Show($"Файл {fileName}{fileExtension} уже добавлен.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
                     {
                         try
                         {
                             editorModelProp.StartEditingModel(filePath);
+                            _kompasFiles.Add(new KompasModel
+                            {
+                                FileName = fileName,
+                                FileExtension = fileExtension,
+                                FilePath = filePath,
+                                IsChecked = false
+                            });
                         }
                         catch (Exception ex)
                         {
                             LogError(ex.Message);
                         }
                     }
-                };
+                }
 
-                worker.RunWorkerCompleted += (s, args) =>
-                {
-                    progressBarWaiting.Visibility = Visibility.Hidden;
-                };
-
-                worker.RunWorkerAsync();
+                progressBarWaiting.Visibility = Visibility.Hidden;
             }
         }
 
@@ -858,11 +916,13 @@ namespace STEP_corrector
             }
 
             MessageBoxResult result = MessageBox.Show("Хотите ли вы создать резервную копию файла перед применением изменений?",
-                                                      "Создание резервной копии",
-                                                      MessageBoxButton.YesNo,
-                                                      MessageBoxImage.Question);
+                                                          "Создание резервной копии",
+                                                          MessageBoxButton.YesNo,
+                                                          MessageBoxImage.Question);
 
             bool createBackup = result == MessageBoxResult.Yes;
+            bool allUpdatesSuccessful = true; 
+            List<string> errorModels = new List<string>(); 
 
             foreach (var model in updatedModels)
             {
@@ -870,8 +930,6 @@ namespace STEP_corrector
                 {
                     string tempDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "STEP_corrector_Temp_Prop");
                     string extractedDir = Path.Combine(tempDir, Path.GetFileNameWithoutExtension(model.PathModel));
-
-                    // Путь к файлу MetaProductInfo
                     string metaFilePath = Path.Combine(extractedDir, "MetaProductInfo");
 
                     if (createBackup)
@@ -898,11 +956,21 @@ namespace STEP_corrector
                 }
                 catch (Exception ex)
                 {
+                    allUpdatesSuccessful = false; // Устанавливаем флаг в false, если произошла ошибка
+                    errorModels.Add(model.FileNameProp); // Добавляем модель с ошибкой в список
                     MessageBox.Show($"Ошибка при обновлении модели {model.FileNameProp}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
-            MessageBox.Show("Изменения успешно применены!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            
+            if (allUpdatesSuccessful)
+            {
+                MessageBox.Show("Изменения успешно применены!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                string errorMessage = "Изменения применены, но возникли ошибки для следующих моделей: " + string.Join(", ", errorModels);
+                MessageBox.Show(errorMessage, "Информация", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void SaveXmlWithEncoding(string filePath, XDocument xDoc, Encoding encoding)
@@ -1152,5 +1220,7 @@ namespace STEP_corrector
             SIIGBF_INCACHEONLY = 0x10
         }
         #endregion 3DmodelProperties
+
+        
     }
 }

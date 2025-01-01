@@ -15,7 +15,7 @@
     <Grid x:Name="MainGrid" MouseLeftButtonDown="Header_MouseLeftButtonDown">
         <Rectangle Fill="#031C30" HorizontalAlignment="Left" Height="452" Margin="0,-1,0,-1.4" VerticalAlignment="Top" Width="49"/>
         <Button x:Name="STPbuttonSidebar" ToolTip="Редактирование STP" 
-        HorizontalAlignment="Left" Margin="8,51,0,0"  
+        HorizontalAlignment="Left" Margin="8,41,0,0"  
         VerticalAlignment="Top" Width="34" Height="38"
         BorderBrush="#00707070" Foreground="#00000000" Click="STPbuttonSidebar_Click">
             <Button.Style>
@@ -50,7 +50,7 @@
         </Button>
 
         <Button x:Name="KMPSbuttonSidebar" ToolTip="Редактирование 3Д-моделей Компас" 
-        HorizontalAlignment="Left" Margin="3,111,0,0"  
+        HorizontalAlignment="Left" Margin="4,96,0,0"  
         VerticalAlignment="Top" Width="42" Height="43"
         BorderBrush="#00707070" Foreground="#00000000" Click="KMPSbuttonSidebar_Click">
             <Button.Style>
@@ -83,9 +83,9 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Label x:Name="PropertiesLabels" Content="Properties" Margin="-2,201,747,223.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
+        <Label x:Name="PropertiesLabels" Content="Properties" Margin="-1,186,746,238.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
         <Button x:Name="KMPSbuttonSidebarProps" ToolTip="Редактирование свойств 3Д-моделей Компас" 
-            HorizontalAlignment="Left" Margin="3,169,0,0"  
+            HorizontalAlignment="Left" Margin="4,154,0,0"  
             VerticalAlignment="Top" Width="42" Height="43"
             BorderBrush="#00707070" Foreground="#00000000" Click="KMPSbuttonSidebarProps_Click">
             <Button.Style>
@@ -144,8 +144,43 @@
                            VerticalAlignment="Top"
                            FontSize="6"
                            TextWrapping="Wrap" />
-        <Label x:Name="ModelLabl" Content="Models" Margin="4,142,754,282.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
-        <Label x:Name="LableSTP" Content="Corrector" Margin="0,81,749,343.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51"/>
+        <Label x:Name="ModelLabl" Content="Models" Margin="5,127,753,297.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
+        <Label x:Name="LableSTP" Content="Corrector" Margin="0,71,749,353.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51"/>
+        <Button x:Name="STPbuttonViewSidebar" ToolTip="Просмотр STP" 
+            HorizontalAlignment="Left" Margin="8,385,0,0"  
+            VerticalAlignment="Top" Width="34" Height="38"
+            BorderBrush="#00707070" Foreground="#00000000" Click="STPbuttonViewSidebar_Click">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://siteoforigin:,,,/img/STPbuttonIco.png" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Grid>
+                                    <Border Background="{TemplateBinding Background}" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/STPbuttonIcoHover.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Label x:Name="LableSTPView" Content="View" Margin="0,415,749,9.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
 
 
         <Grid x:Name="STEPgrid" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
@@ -208,7 +243,7 @@
                         ToolTip="Удалить из списка отмеченные файлы"
                     />
             <Label Content="Выберите STEP-файлы:" HorizontalAlignment="Left" Margin="113,80,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
-            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,51,0,0" VerticalAlignment="Top" Width="2"/>
+            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,40,0,0" VerticalAlignment="Top" Width="2"/>
             <Label Content="Этап 1: подготовка .stp-файла" HorizontalAlignment="Left" Margin="59,25,0,0" VerticalAlignment="Top" FontSize="22" FontFamily="Constantia"/>
 
         </Grid>
@@ -268,13 +303,13 @@
                 ToolTip="Удалить из списка отмеченные файлы"
                     />
             <Label Content="Выберите ЗD-модели:" HorizontalAlignment="Left" Margin="126,80,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Constantia"/>
-            <Rectangle x:Name="flagSidebar" Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,113,0,0" VerticalAlignment="Top" Width="2"/>
+            <Rectangle x:Name="flagSidebar" Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,101,0,0" VerticalAlignment="Top" Width="2"/>
             <Label Content="Этап 2: удаление дублирующихся обозначений" HorizontalAlignment="Left" Margin="59,25,0,0" VerticalAlignment="Top" FontSize="20" FontFamily="Constantia"/>
 
         </Grid>
 
-        <Grid x:Name="STEPprop" Margin="0,0,0,0" OpacityMask="Black">
-            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,172,0,0" VerticalAlignment="Top" Width="2"/>
+        <Grid x:Name="STEPprop" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
+            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,157,0,0" VerticalAlignment="Top" Width="2"/>
 
             <DataGrid x:Name="DataGrid" HorizontalAlignment="Left" Height="250" Margin="69,70,0,0" 
           VerticalAlignment="Top" Width="500" FontSize="14"
@@ -380,12 +415,22 @@
                 Click="AddNewModelPropButton_Click"
                 ToolTip="Внести новое значение в свойство модели"     
                         />
-            <Image x:Name="PreviewImage" Height="203" Margin="0,0,9,149.6" VerticalAlignment="Bottom" Width="203"  HorizontalAlignment="Right"/>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,6,150" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Image x:Name="PreviewImage" Height="203" Width="203"/>
+            </Border>
             <Button x:Name="ApplyNewModelPropButton" Style="{DynamicResource ImportButtonStyle}" Content="Применить" HorizontalAlignment="Left"
                 Margin="454,399,0,0" VerticalAlignment="Top"
                 Foreground="White" Width="115" Height="30" FontFamily="Constantia"
                 Click="ApplyNewModelPropButton_Click"                
                 ToolTip="Применить новые значения свойств"/>
+            <TextBlock x:Name="LabelPropertiesVisorToolpit" 
+           Text="*Для предпросмотра дважды&#x0a;кликните по имени файла&#x0a;в таблице" 
+           HorizontalAlignment="Left" 
+           Margin="588,326,0,0" 
+           VerticalAlignment="Top" 
+           FontSize="14" 
+           FontFamily="Constantia"/>
+
 
         </Grid>
 
@@ -397,6 +442,9 @@
             </Grid>
             <Label Content="Обработка..." HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontSize="20" FontWeight="Bold"/>
             <Image gif:ImageBehavior.AnimatedSource="pack://siteoforigin:,,,/img/load.gif" Width="200" Height="200" />
+        </Grid>
+        <Grid x:Name="stpView" Margin="0,0,0,0" OpacityMask="Black">
+            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,386,0,0" VerticalAlignment="Top" Width="2"/>
         </Grid>
     </Grid>
 </Window>
