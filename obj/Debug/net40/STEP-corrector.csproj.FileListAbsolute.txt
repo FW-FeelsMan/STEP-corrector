@@ -1,4 +1,3 @@
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\Interop.Kompas6API5.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\Interop.Kompas6Constants3D.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\Interop.Kompas6API2D5COM.dll
@@ -21,17 +20,19 @@ D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.AssemblyInfo.cs
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\AutoCorrect.txt
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\STEP-corrector.exe
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\DotNetZip.dll
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\WpfAnimatedGif.dll
-D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csproj.CopyComplete
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\STEP-corrector.pdb
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\DotNetZip.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Microsoft.WindowsAPICodePack.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Microsoft.WindowsAPICodePack.Shell.dll
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\WpfAnimatedGif.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Interop.Kompas6API5.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Interop.Kompas6Constants3D.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Interop.Kompas6API2D5COM.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Interop.Kompas6API3D5COM.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Interop.Kompas6Constants.dll
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\Interop.KompasAPI7.dll
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csproj.CopyComplete
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.exe
 D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.pdb
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\obj\Debug\net40\STEP-corrector.csprojAssemblyReference.cache
+D:\Unity\STEP-corrector(.net 4)\STEP-corrector\bin\Debug\net40\AssimpNet.dll

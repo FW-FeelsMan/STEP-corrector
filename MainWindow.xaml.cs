@@ -17,6 +17,8 @@ using System.Windows.Media.Imaging;
 
 using Application = System.Windows.Application;
 using System.Windows.Media;
+using Assimp;
+using System.Windows.Media.Media3D;
 
 namespace STEP_corrector
 {
@@ -49,7 +51,7 @@ namespace STEP_corrector
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
-            stpView.Visibility = Visibility.Hidden;
+           
             progressBarWaiting.Visibility = Visibility.Hidden;
 
             LabelPropertiesAmmountElemValue.Content = "0";
@@ -69,8 +71,7 @@ namespace STEP_corrector
                 LogError(ex.Message);
             }
 
-            
-
+            Load3DModel("D:\\Работа\\тест\\ПТК.002.03.05.08.150 СБ.stp");
         }
 
         public void AddModelData(ModelData modelData)
@@ -142,14 +143,6 @@ namespace STEP_corrector
             STEPgrid.Visibility = Visibility.Hidden;
             STEPkompas.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
-            stpView.Visibility = Visibility.Hidden;
-        }
-        private void STPbuttonViewSidebar_Click(object sender, RoutedEventArgs e)
-        {
-            STEPkompas.Visibility = Visibility.Hidden;
-            STEPgrid.Visibility = Visibility.Hidden;
-            STEPprop.Visibility = Visibility.Hidden;
-            stpView.Visibility = Visibility.Visible;
         }
 
         private void STPbuttonSidebar_Click(object sender, RoutedEventArgs e)
@@ -157,14 +150,12 @@ namespace STEP_corrector
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Visible;
             STEPprop.Visibility = Visibility.Hidden;
-            stpView.Visibility = Visibility.Hidden;
         }
         private void KMPSbuttonSidebarProps_Click(object sender, RoutedEventArgs e)
         {
             STEPkompas.Visibility = Visibility.Hidden;
             STEPgrid.Visibility = Visibility.Hidden;
             STEPprop.Visibility = Visibility.Visible;
-            stpView.Visibility = Visibility.Hidden;
         }
 
         private void ButtonQuit_Click(object sender, RoutedEventArgs e)
@@ -1221,6 +1212,87 @@ namespace STEP_corrector
         }
         #endregion 3DmodelProperties
 
-        
+        #region OpenGL
+
+        private void Load3DModel(string filePath)
+        {
+            // Создаем объект Assimp для импорта модели
+            var importer = new AssimpContext();
+
+            try
+            {
+                // Загружаем модель
+                var scene = importer.ImportFile(filePath, PostProcessSteps.Triangulate | PostProcessSteps.GenerateNormals);
+
+                if (scene == null || !scene.HasMeshes)
+                {
+                    MessageBox.Show("Не удалось загрузить модель.");
+                    return;
+                }
+
+                // Берем первый меш из сцены
+                var mesh = scene.Meshes.First();
+
+                // Конвертируем меш в MeshGeometry3D
+                var geometry = ConvertAssimpMeshToMeshGeometry3D(mesh);
+
+                // Создаем материал для модели
+                var material = new DiffuseMaterial(new SolidColorBrush(Colors.LightGray));
+
+                // Создаем объект GeometryModel3D
+                var model = new GeometryModel3D
+                {
+                    Geometry = geometry,
+                    Material = material
+                };
+
+                // Добавляем модель в Viewport3D
+                var modelVisual = new ModelVisual3D { Content = model };
+                viewport3D.Children.Add(modelVisual);
+
+                // Добавляем источник света
+                var light = new DirectionalLight(Colors.White, new System.Windows.Media.Media3D.Vector3D(-1, -1, -1));
+                viewport3D.Children.Add(new ModelVisual3D { Content = light });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки модели: {ex.Message}");
+            }
+        }
+
+        private MeshGeometry3D ConvertAssimpMeshToMeshGeometry3D(Mesh mesh)
+        {
+            var geometry = new MeshGeometry3D();
+
+            // Добавляем вершины
+            foreach (var vertex in mesh.Vertices)
+            {
+                geometry.Positions.Add(new Point3D(vertex.X, vertex.Y, vertex.Z));
+            }
+
+            // Добавляем нормали
+            if (mesh.HasNormals)
+            {
+                foreach (var normal in mesh.Normals)
+                {
+                    geometry.Normals.Add(new System.Windows.Media.Media3D.Vector3D(normal.X, normal.Y, normal.Z));
+                }
+            }
+
+            // Добавляем индексы треугольников
+            foreach (var face in mesh.Faces)
+            {
+                if (face.IndexCount == 3) // Убедимся, что это треугольник
+                {
+                    geometry.TriangleIndices.Add(face.Indices[0]);
+                    geometry.TriangleIndices.Add(face.Indices[1]);
+                    geometry.TriangleIndices.Add(face.Indices[2]);
+                }
+            }
+
+            return geometry;
+        }
+        #endregion OpenGL
+
     }
 }

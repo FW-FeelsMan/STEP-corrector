@@ -5,5 +5,6 @@
   </PropertyGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.netframework.referenceassemblies.net40\1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net40.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.netframework.referenceassemblies.net40\1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net40.targets')" />
+    <Import Project="$(NuGetPackageRoot)assimpnet\4.1.0\build\AssimpNet.targets" Condition="Exists('$(NuGetPackageRoot)assimpnet\4.1.0\build\AssimpNet.targets')" />
   </ImportGroup>
 </Project>

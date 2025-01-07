@@ -146,44 +146,9 @@
                            TextWrapping="Wrap" />
         <Label x:Name="ModelLabl" Content="Models" Margin="5,127,753,297.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
         <Label x:Name="LableSTP" Content="Corrector" Margin="0,71,749,353.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51"/>
-        <Button x:Name="STPbuttonViewSidebar" ToolTip="Просмотр STP" 
-            HorizontalAlignment="Left" Margin="8,385,0,0"  
-            VerticalAlignment="Top" Width="34" Height="38"
-            BorderBrush="#00707070" Foreground="#00000000" Click="STPbuttonViewSidebar_Click">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <ImageBrush ImageSource="pack://siteoforigin:,,,/img/STPbuttonIco.png" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Grid>
-                                    <Border Background="{TemplateBinding Background}" />
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background">
-                                            <Setter.Value>
-                                                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/STPbuttonIcoHover.png" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
-        <Label x:Name="LableSTPView" Content="View" Margin="0,415,749,9.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
 
 
-        <Grid x:Name="STEPgrid" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
+        <Grid x:Name="STEPgrid" Margin="0,0,0,0" OpacityMask="Black">
 
             <Button Style="{DynamicResource CloseButtonStyle}" x:Name="ButtonList"
             HorizontalAlignment="Left" Width="22" BorderThickness="0,0,0,0" ClipToBounds="True"
@@ -443,8 +408,13 @@
             <Label Content="Обработка..." HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontSize="20" FontWeight="Bold"/>
             <Image gif:ImageBehavior.AnimatedSource="pack://siteoforigin:,,,/img/load.gif" Width="200" Height="200" />
         </Grid>
-        <Grid x:Name="stpView" Margin="0,0,0,0" OpacityMask="Black">
-            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="0,386,0,0" VerticalAlignment="Top" Width="2"/>
+
+        <Grid x:Name="viewport" Margin="0,0,0,0" OpacityMask="Black">
+            <Viewport3D Name="viewport3D">
+                <Viewport3D.Camera>
+                    <PerspectiveCamera Position="0,0,5" LookDirection="0,0,-1" UpDirection="0,1,0" FieldOfView="45" />
+                </Viewport3D.Camera>
+            </Viewport3D>
         </Grid>
     </Grid>
 </Window>
