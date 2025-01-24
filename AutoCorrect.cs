@@ -52,22 +52,11 @@ namespace STEP_corrector
                 }
                 else
                 {
-                    // Заменяем значение
                     line = line.Replace(replacement.Key, replacement.Value);
                 }
             }
 
             return line;
-        }
-
-        private string ConvertToStepFormat(string value)
-        {
-            var result = new StringBuilder();
-            foreach (char c in value)
-            {
-                result.Append($"\\X2\\{((int)c).ToString("X4", CultureInfo.InvariantCulture)}\\X0\\");
-            }
-            return result.ToString();
         }
     }
 }

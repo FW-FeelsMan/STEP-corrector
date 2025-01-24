@@ -5,19 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
+        Title="STEP-corrector" Height="450" Width="800" AllowsTransparency="True"
+        Icon="pack://siteoforigin:,,,/img/faviconV2.png"
+        ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True" SnapsToDevicePixels="False">
 
-        Title="STEP-corrector" Height="450" Width="800" AllowsTransparency="True"  Icon="pack://siteoforigin:,,,/img/faviconV2.png"
-        ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="pack://siteoforigin:,,,/img/background.png"/>
     </Window.Background>
 
-    <Grid x:Name="MainGrid" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+    <Grid x:Name="MainGrid" MouseLeftButtonDown="Header_MouseLeftButtonDown" UseLayoutRounding="True" SnapsToDevicePixels="False">
+
         <Rectangle Fill="#031C30" HorizontalAlignment="Left" Height="452" Margin="0,-1,0,-1.4" VerticalAlignment="Top" Width="49"/>
         <Button x:Name="STPbuttonSidebar" ToolTip="Редактирование STP" 
         HorizontalAlignment="Left" Margin="8,41,0,0"  
         VerticalAlignment="Top" Width="34" Height="38"
-        BorderBrush="#00707070" Foreground="#00000000" Click="STPbuttonSidebar_Click">
+        BorderBrush="#00707070" Foreground="#00000000" Click="STPbuttonSidebar_Click"
+        UseLayoutRounding="True" SnapsToDevicePixels="False">
+
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -52,7 +57,8 @@
         <Button x:Name="KMPSbuttonSidebar" ToolTip="Редактирование 3Д-моделей Компас" 
         HorizontalAlignment="Left" Margin="4,96,0,0"  
         VerticalAlignment="Top" Width="42" Height="43"
-        BorderBrush="#00707070" Foreground="#00000000" Click="KMPSbuttonSidebar_Click">
+        BorderBrush="#00707070" Foreground="#00000000" Click="KMPSbuttonSidebar_Click"
+                UseLayoutRounding="True" SnapsToDevicePixels="False">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -83,11 +89,16 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Label x:Name="PropertiesLabels" Content="Properties" Margin="-1,186,746,238.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
+        <Label x:Name="PropertiesLabels" Content="Properties" Margin="-1,186,746,238.6"
+       HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"
+       Height="25" FontWeight="Bold" FontSize="9" 
+       UseLayoutRounding="True" SnapsToDevicePixels="False"/>
+
         <Button x:Name="KMPSbuttonSidebarProps" ToolTip="Редактирование свойств 3Д-моделей Компас" 
             HorizontalAlignment="Left" Margin="4,154,0,0"  
             VerticalAlignment="Top" Width="42" Height="43"
-            BorderBrush="#00707070" Foreground="#00000000" Click="KMPSbuttonSidebarProps_Click">
+            BorderBrush="#00707070" Foreground="#00000000" Click="KMPSbuttonSidebarProps_Click"
+                UseLayoutRounding="True" SnapsToDevicePixels="False">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -121,7 +132,7 @@
 
 
         <Rectangle Fill="White" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="800"/>
-        <Label x:Name="TitelLabel" Content="STEP-corrector (beta v7.0)" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF030303" Margin="49,0,0,0" Background="Transparent" Width="153"/>
+        <Label x:Name="TitelLabel" Content="STEP-corrector" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF030303" Margin="49,0,0,0" Background="Transparent" Width="153"/>
         <Image HorizontalAlignment="Left" Height="23" Margin="12,2,0,0" VerticalAlignment="Top" Width="24" Source="pack://siteoforigin:,,,/img/Union.png"/>
         <Button Style="{DynamicResource CloseButtonStyle}" x:Name="ButtonQuit" Content="X"
                         HorizontalAlignment="Left" Width="28" BorderThickness="0,0,0,0" ClipToBounds="True"
@@ -145,10 +156,49 @@
                            FontSize="6"
                            TextWrapping="Wrap" />
         <Label x:Name="ModelLabl" Content="Models" Margin="5,127,753,297.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
+        <Label x:Name="InfoLabel" Content="Справка" Margin="-1,424,746,0.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9"/>
+
+        <Button x:Name="infoButton" ToolTip="Справочная информация" 
+            HorizontalAlignment="Left" Margin="4,392,0,0"  
+            VerticalAlignment="Top" Width="42" Height="43"
+            BorderBrush="#00707070" Foreground="#00000000" Click="InfoButton_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/infoPic.png"/>
+            </Button.Background>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://siteoforigin:,,,/img/infoPic.png" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Grid>
+                                    <Border Background="{TemplateBinding Background}" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="pack://siteoforigin:,,,/img/infoPicHover.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
         <Label x:Name="LableSTP" Content="Corrector" Margin="0,71,749,353.6" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Height="25" FontWeight="Bold" FontSize="9" Width="51"/>
 
 
-        <Grid x:Name="STEPgrid" Margin="0,0,0,0" OpacityMask="Black">
+        <Grid x:Name="STEPgrid" Margin="0,0,0,0" OpacityMask="Black" d:IsHidden="True">
 
             <Button Style="{DynamicResource CloseButtonStyle}" x:Name="ButtonList"
             HorizontalAlignment="Left" Width="22" BorderThickness="0,0,0,0" ClipToBounds="True"
@@ -409,12 +459,64 @@
             <Image gif:ImageBehavior.AnimatedSource="pack://siteoforigin:,,,/img/load.gif" Width="200" Height="200" />
         </Grid>
 
-        <Grid x:Name="viewport" Margin="0,0,0,0" OpacityMask="Black">
-            <Viewport3D Name="viewport3D">
-                <Viewport3D.Camera>
-                    <PerspectiveCamera Position="0,0,5" LookDirection="0,0,-1" UpDirection="0,1,0" FieldOfView="45" />
-                </Viewport3D.Camera>
-            </Viewport3D>
+        <Grid x:Name="infoGrid" Margin="59,25,0,-0.4" OpacityMask="Black">
+            <Label Content="Инструкция по использованию программы STEP-corrector:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" FontFamily="Constantia"/>
+            <Rectangle Fill="White" HorizontalAlignment="Left" Height="37" Margin="-59,372,0,0" VerticalAlignment="Top" Width="2"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="10,37,0,48">
+                <StackPanel>
+                    <TextBlock Text="1. Работа с вкладкой STP-corrector" FontSize="16" FontWeight="Bold" Margin="0,10,0,5" />
+                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0">
+            <Run Text="1. Выберите необходимые STP-файлы перед их импортом в CAD-систему." />
+            <LineBreak />
+            <Run Text="  - Программа предложит создать резервную копию файла. Рекомендуется соглашаться, а также производить редактирование свойств и наименований моделей Компас 3D исключительно на локальном диске, а не в сетевой папке." />
+            <LineBreak />
+            <Run Text="  - Программа поддерживает работу с несколькими STP-файлами одновременно. Отметьте загруженные файлы в поле 'Исправить STEP-файлы' и нажмите кнопку 'Исправить'." />
+                    </TextBlock>
+
+                    <TextBlock Text="1.1. Импорт в CAD-систему" FontSize="16" FontWeight="Bold" Margin="0,10,0,5" />
+                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0">
+            <Run Text="  - Загрузите исправленные STP-файлы в CAD-систему. CAD-система (например Компас 3D) сгенерирует 3D-модели с расширениями '.a3d' и '.m3d'." />
+            <LineBreak />
+            <Run Text="  - Если потребуется вернуть исходную версию STP-файла, используйте резервную копию, удалив расширение '.bak' из имени файла." />
+                    </TextBlock>
+
+                    <TextBlock FontSize="16" FontWeight="Bold" Margin="0,10,0,5">
+            <Run Text="2. Работа с вкладкой Kompas-Models" />
+                    </TextBlock>
+                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0">
+            <Run Text="  - После успешной загрузки STP-файла в Компас 3D будут автоматически сгенерированы файлы 3D-моделей с расширениями '.a3d' и '.m3d'." />
+            <LineBreak />
+            <Run Text="    1. Закройте Компас 3D и убедитесь, что файлы моделей не заняты другими программами." />
+            <LineBreak />
+            <Run Text="    2. Перейдите во вкладку 'Kompas-Models', нажмите кнопку 'Загрузить 3D-модели', и добавьте сгенерированные файлы в список 'Исправить обозначения'." />
+            <LineBreak />
+            <Run Text="    3. Выберите все добавленные модели и нажмите кнопку 'Исправить'." />
+            <LineBreak />
+            <Run Text="       Программа удалит дублирующиеся значения из поля 'Наименования', оставив только корректные обозначения." />
+                    </TextBlock>
+
+                    <TextBlock Text="Дополнительные возможности" FontSize="16" FontWeight="Bold" Margin="0,10,0,5" />
+                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0">
+            <Run Text="Программа STEP-corrector позволяет редактировать свойства 3D-моделей Компас 3D:" />
+            <LineBreak />
+            <Run Text="1. Перейдите во вкладку 'Kompas-Properties'." />
+            <LineBreak />
+            <Run Text="2. Нажмите кнопку 'Загрузить 3D-модели' для добавления файлов в таблицу." />
+            <LineBreak />
+            <Run Text="3. В таблице отобразятся свойства моделей, которые можно редактировать выборочно или массово." />
+                    </TextBlock>
+
+                    <TextBlock Text="ВАЖНО:" FontSize="16" FontWeight="Bold" Foreground="Red" Margin="0,10,0,5" />
+                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0">
+            <Run Text="1. Всегда создавайте резервные копии исходных данных." />
+            <LineBreak />
+            <Run Text="2. Имейте в виду, что при импорте STP-файлов, созданных в T-flex CAD, могут генерироваться модели с названиями вида '3D фрагмент'. Это связано с особенностями работы T-flex CAD, так как детали с различными исполнениями записываются в STP-файл как сборки. Исправление этого недостатка невозможно." />
+            <LineBreak />
+             <Run Text="3. STP-файлы, которые были созданы в программе SOLIDWORKS зачастую не требуют корректировки. Загрузите STEP-файл в свою CAD-систему и убедитесь что файлы моделей имеют корректные имена. В случае если поля Обозначения и Наименования совпадают - воспользуйтесь вкладкой Kompas3D-Models" />
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+
         </Grid>
     </Grid>
 </Window>
